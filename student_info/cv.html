@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Resume</title>
+    <link rel="stylesheet" href="../assets/style/cv.css">
+    <script src="../assets/script/script.js" defer></script>
+</head>
+<body>
+    <main class="cv-container" id="cvContent">
+        <header class="cv-header">
+            <div class="detail">
+                <div class="profile-img-container">
+                    <img id="displayImage" src="" alt="Profile Picture" class="profile-img">
+                </div>
+                <div class="name-dept">
+                <h1 id="displayName">Student Name</h1>
+                <p class="dept-title"><span id="displayDept">Department</span></p>
+                </div>
+            </div>
+            <div class="contact-info">
+                <container>
+                <div class="contact-item">
+                <strong>ID:</strong> <span id="displayId">--</span>
+                </div>
+                <div class="contact-item">
+                <strong>Email:</strong> <span id="displayEmail">--</span>
+                </div>
+                </container>
+              <container>
+                <div class="contact-item">
+                    <strong>Phone:</strong> <span id="displayPhone">--</span>
+                </div>
+                <div class="contact-item">
+                    <strong>Address:</strong> <span id="displayAddress">--</span>
+                </div>
+                </container>
+            </div>
+        </header>
+        
+        <div class="cv-body">
+            <section class="cv-section">
+                <h3>Professional Summary</h3>
+                <p id="displaySummary"></p>
+            </section>
+
+            <section class="cv-section">
+                <h3>Projects</h3>
+                <p id="displayProjects"></p>
+            </section>
+
+            <section class="cv-section">
+                <h3>Skills & Interests</h3>
+                <p id="displaySkills"></p>
+            </section>
+        </div>
+    </main>
+
+    <div class="actions">
+        <button id="printBtn" class="btn print-btn">Download / Print PDF</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+:root {
+   --primary-gradient: linear-gradient(45deg, #4e54c8, #8f94fb);
+   --primary-color: #0f0f1e;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--primary-gradient);
+    padding: 20px;
+    color: #333;
+}
+
+.cv-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 50px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+.cv-header {
+    text-align: center;
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 25px;
+    margin-bottom: 30px;
+}
+
+.cv-header h1 {
+    margin: 0 0 10px 0;
+    color: var(--primary-color);
+}
+
+.cv-section {
+    margin-bottom: 30px;
+}
+.cv-section h3 {
+    color: var(--primary-color);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    text-transform: uppercase;
+    font-size: 1.1em;
+}
+
+.actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.profile-img-container {
+    width: 130px;
+    height: 130px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    background-color: white;
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.dept-title {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+.detail {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.contact-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px 30px; 
+    font-size: 0.95rem;
+    background: rgba(0, 0, 0, 0.1); 
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+.contact-info container {
+    display:flex;
+    flex-direction: column;
+    align-items: start;
+
+}
+.contact-info container div {
+    margin-bottom: 8px;
+}
+
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+@media print {
+    .profile-img-container {
+        border-color: #ddd;
+    }
+    .contact-info {
+        background: none;
+        color: black;
+        border: 1px solid #eee;
+    }
+}
+.btn {
+    padding: 12px 24px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+}
+
+.print-btn {
+    background-color: #3f01bb;
+}
+.print-btn:hover {
+    background-color: #2e0190;
+    transform: translateY(-3px);
+}   
+
+
+
+
+@media print {
+    .actions {
+        display: none;
+    }
+
+    body {
+        background-color: white;
+        padding: 0;
+    }
+
+    .cv-container {
+        box-shadow: none;
+        border: none;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <link rel="stylesheet" href="../assets/style/form.css">
+    <script src="../assets/script/script.js" defer></script>
+</head>
+<body>
+    <main class="container">
+        <div class="card">
+            <h2>Curriculum Vitae Details</h2>
+            <form id="cvForm" autocomplete="off">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required maxlength="50" placeholder="e.g. John Doe">
+                </div>
+                 <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" required maxlength="100" placeholder="e.g. john.doe@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" required maxlength="15" placeholder="e.g. +1234567890">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" required maxlength="200" placeholder="e.g. 123 Main St, City, Country">
+                </div>
+                <div class="form-group">
+                    <label for="department">Department </label>
+                    <input type="text" id="department" required  placeholder="e.g. Computer Science">
+                </div>
+                <div class="form-group">
+                    <label for="summary">Professional Summary</label>
+                    <textarea id="summary" rows="3" maxlength="300" placeholder="Brief intro about yourself..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="projects">Key Projects</label>
+                    <textarea id="projects" rows="4" maxlength="500" placeholder="List your main projects..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="skills">Skills & Interests</label>
+                    <input type="text" id="skills" maxlength="100" placeholder="e.g. Java, HTML">
+                </div>
+                 <div class="form-group">
+                   <label for="personalImage">Personal Image</label>
+                   <input type="file" id="personalImage" accept="image/*">
+                </div>
+               
+                <button type="submit" class="btn">Save & Generate CV</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
