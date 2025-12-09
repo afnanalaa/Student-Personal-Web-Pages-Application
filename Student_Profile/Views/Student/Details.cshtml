@@ -1,0 +1,14 @@
+﻿@model Student_Profile.Models.StudentProfile
+
+<h2>@Model.User.FullName Profile</h2> 
+@if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+{
+    <img src="~/uploads/student-profiles/@Model.ProfileImageUrl" width="200" />
+}
+
+<p><strong>Bio:</strong> @Model.Bio</p>
+<p><strong>Interests:</strong> @Model.Interests</p>
+<p><strong>Skills:</strong> @Model.Skills</p>
+<p><strong>GitHub:</strong> <a href="@Model.GitHub">@Model.GitHub</a></p>
+<p><strong>LinkedIn:</strong> <a href="@Model.LinkedIn">@Model.LinkedIn</a></p>
+<p><strong>Email:</strong> @Model.User.Email</p>

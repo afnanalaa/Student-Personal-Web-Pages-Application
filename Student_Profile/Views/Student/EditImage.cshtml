@@ -1,0 +1,22 @@
+﻿@model Student_Profile.ViewModels.StudentProfileImageViewModel
+
+<h2>Edit Profile Image</h2>
+
+<div class="form-group">
+    <label>Current Image:</label><br />
+    <img src="~/uploads/student-profiles/@(Model.ExistingProfileImage ?? "default-avatar.png")" width="150" />
+</div>
+
+<form asp-action="EditImage" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="ProfileImage">Upload New Image</label>
+        <input asp-for="ProfileImage" type="file" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Update Image</button>
+    <a asp-action="RemoveProfileImage" class="btn btn-danger mt-2">Remove Image</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

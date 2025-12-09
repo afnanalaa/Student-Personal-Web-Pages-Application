@@ -1,0 +1,20 @@
+﻿@model Student_Profile.ViewModels.PostViewModel
+
+@{
+    ViewData["Title"] = "Create Post";
+}
+
+<h2>Create Post</h2>
+
+<form asp-action="CreatePost" method="post">
+    <div class="form-group">
+        <label asp-for="Content"></label>
+        <textarea asp-for="Content" class="form-control"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Save Post</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

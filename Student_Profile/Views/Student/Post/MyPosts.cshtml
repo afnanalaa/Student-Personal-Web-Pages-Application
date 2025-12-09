@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Student_Profile.Models.Post>
+
+@{
+    ViewData["Title"] = "My Posts";
+}
+
+<h2>My Posts</h2>
+
+<a asp-action="CreatePost" class="btn btn-primary mb-3">Create New Post</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Content</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in Model)
+        {
+            <tr>
+                <td>@post.Content</td>
+                <td>@post.Status</td>
+                <td>@post.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <a asp-action="EditPost" asp-route-id="@post.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <form asp-action="DeletePost" asp-route-id="@post.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
