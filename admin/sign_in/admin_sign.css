@@ -1,0 +1,21 @@
+.navbar {
+    background-color: #004d99 !important;
+}
+.navbar .navbar-brand {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+.navbar .navbar-brand:hover {
+    color: #e0e0e0 !important;
+}
+body {
+    background-color: #f8f9fa;
+}
+.btn{
+    color: #ffffff;
+    font-weight: 700;
+}
+.btn:hover{
+    color: #e0e0e0;
+    transform: translateY(-1px);
+}

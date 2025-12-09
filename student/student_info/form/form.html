@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Details</title>
-    <link rel="stylesheet" href="../assets/style/form.css">
-    <script src="../assets/script/script.js" defer></script>
+    <link rel="stylesheet" href="form.css">
 </head>
 <body>
     <main class="container">
         <div class="card">
-            <h2>Curriculum Vitae Details</h2>
+            <h2>Student Details</h2>
             <form id="cvForm" autocomplete="off">
                 <div class="form-group">
                     <label for="fullName">Full Name</label>
@@ -41,17 +40,26 @@
                     <textarea id="projects" rows="4" maxlength="500" placeholder="List your main projects..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="skills">Skills & Interests</label>
-                    <input type="text" id="skills" maxlength="100" placeholder="e.g. Java, HTML">
+                    <label for="skills">Skills</label>
+                    <input type="text" id="skills" maxlength="100" placeholder="e.g. Java, HTML , soildworks">
+                </div>
+                <div class="form-group">
+                    <label for="interests"> Interests</label>
+                    <input type="text" id="interests" maxlength="100" placeholder="e.g. Reading, web development,Designing">
                 </div>
                  <div class="form-group">
                    <label for="personalImage">Personal Image</label>
                    <input type="file" id="personalImage" accept="image/*">
                 </div>
-               
+                <div class="form-group">
+                    <label for="contactInformation">Contact Information</label>
+                    <input type="text" id="contactInformation" maxlength="100" placeholder="e.g. linkedin.com/in/yourprofile">
+                </div>
                 <button type="submit" class="btn">Save & Generate CV</button>
             </form>
         </div>
     </main>
+        <script src="../script.js" defer></script>
+
 </body>
 </html>

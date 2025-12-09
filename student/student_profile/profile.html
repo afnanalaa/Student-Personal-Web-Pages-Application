@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[Student Name]'s Profile - PSU WAD</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="profile.css"> 
+    </head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid container">
+            <a class="navbar-brand" href="index.html">Port Said University</a>
+            <div class="d-flex">
+                <ul class="navbar-nav me-3">
+                    <li class="nav-item"><a class="nav-link" href="students-directory.html">Students Directory</a></li>
+                </ul>
+                <a class="btn btn-info" href="../student_dashboard/dashboard.html">
+                    <i class="bi bi-person-circle"></i> My Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container my-5">
+        <div class="row">
+            
+            <div class="col-lg-4 mb-4">
+                <div class="card p-4 sticky-top" style="top: 20px;">
+                    <div class="text-center mb-4">
+                        <img src="https://via.placeholder.com/150" class="img-fluid rounded-circle mb-3 border border-4 border-primary" alt="Profile Photo">
+                        <h4 class="fw-bold">Student Name</h4>
+                        <p class="text-muted">Electrical Engineering | Final Year</p>
+                    </div>
+                    <a href="#" class="btn btn-outline-primary mb-2"><i class="bi bi-linkedin me-1"></i> View Contact</a>
+                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-bookmark-fill me-1"></i> View Projects</a>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                
+                <div class="card p-4 mb-4 shadow-sm">
+                    <h4 class="text-primary mb-3">Create New Post</h4>
+                    <form id="postCreationForm">
+                        <textarea class="form-control mb-3" id="postContent" rows="3" placeholder="Share a project update or an achievement..." required></textarea>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="file" class="form-control w-auto" id="postFile" accept="image/*,.pdf">
+                            <button type="submit" class="btn btn-success">Submit for Review</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <h4 class="text-secondary mb-3">Recent Posts by Students</h4>
+                <div id="postsFeed">
+                    
+                    <div class="card mb-4 post-item shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://via.placeholder.com/40" class="rounded-circle me-3" style="width: 40px; height: 40px;" alt="User Avatar">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Colleague Name</h6>
+                                    <small class="text-muted">Posted 2 hours ago • Electrical Engineering</small>
+                                </div>
+                            </div>
+                            <h5 class="card-title fw-bold">Excited to finish my WAD Final Project!</h5>
+                            <p class="card-text">
+                                We've successfully implemented the Admin Approval Workflow and secured the system against SQL injection. Check out our GitHub link in the bio! #WebDev #PSU
+                            </p>
+                            <img src="https://via.placeholder.com/800x400?text=Project+Mockup" class="img-fluid rounded mb-3" alt="Post Image">
+                        
+                        </div>
+                    </div>
+
+                    <div class="card mb-4 post-item shadow-sm">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

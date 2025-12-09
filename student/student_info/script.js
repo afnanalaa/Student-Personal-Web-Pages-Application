@@ -44,7 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     summary: sanitize(document.getElementById('summary').value),
                     projects: sanitize(document.getElementById('projects').value),
                     skills: sanitize(document.getElementById('skills').value),
-                    image: base64Image || null, // Store image string
+                    interests: sanitize(document.getElementById('interests').value),
+                    linkedin: sanitize(document.getElementById('linkedin').value),
+                    image: base64Image || null,
                     timestamp: new Date().toISOString() 
                 };
 
@@ -130,6 +132,8 @@ function loadCV() {
     setText('displaySummary', data.summary);
     setText('displayProjects', data.projects);
     setText('displaySkills', data.skills);
+    setText('displayInterests', data.interests);
+    setText('displayLinkedIn', data.linkedin);
 
     // Populate Image
     const imgElement = document.getElementById('displayImage');

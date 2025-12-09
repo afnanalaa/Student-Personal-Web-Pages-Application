@@ -65,7 +65,11 @@ h2 {
 .form-group:has(#address),
 .form-group:has(#summary),
 .form-group:has(#projects),
-.form-group:has(#skills) {
+.form-group:has(#skills),
+.form-group:has(#interests),
+.form-group:has(#linkedin) ,
+.form-group:has(#department)
+{
     grid-column: span 2;
 }
 

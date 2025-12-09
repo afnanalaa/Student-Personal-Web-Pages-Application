@@ -1,0 +1,131 @@
+:root{
+    --primary-color: #007bff;
+    --primary-color-hover: #0056b3;
+   
+    --background-color: #f0f2f5;
+    --text-color: #343a40;
+    --muted-text-color: #6c757d;
+    --border-color: #ced4da;
+    --input-focus-shadow: rgba(0, 123, 255, 0.2);
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #343a40;
+    line-height: 1.6;
+}
+
+.navbar {
+    background-color: var(--primary-color) !important; 
+    box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.2);
+}
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+.btn{
+    border-radius: 8px; 
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 0 5px;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    background-color: var(--primary-color-hover); 
+    color:#f0f2f5;
+}
+.btn-outline-success {
+    color: #ffffff;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+.btn-outline-success:hover {
+    background-color: var(--primary-color-hover);
+    border-color: var(--primary-color-hover);
+    transform: translateY(-1px); 
+}
+
+.card {
+    border: none;
+    border-radius: 18px; 
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); 
+    padding: 1.5rem 0; 
+}
+
+.card > * {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+.card .card-title {
+    padding-bottom: 1rem;
+}
+
+.highlight-text {
+    color:#007bff;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+
+.text-primary {
+    color: #007bff !important;
+}
+.text-muted {
+    color: #6c757d !important;
+}
+
+.form-label {
+    font-weight: 700; 
+    color: #343a40;
+    margin-bottom: 0.3rem; 
+    
+}
+.form-control {
+    border-radius: 8px; 
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.3rem rgba(0, 123, 255, 0.2); 
+    background-color: #fff; 
+}
+form .row input{
+    size: 80%;
+}
+.btn-success {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-size: 1.2rem; 
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border-radius: 10px;
+}
+
+.btn-success:hover {
+    background-color: var(--primary-color-hover);
+    border-color: var(--primary-color-hover);
+    transform: scale(1.01); 
+}
+
+.text-center.mt-4 a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+}
+.text-center.mt-4 a:hover {
+    text-decoration: underline;
+}
+
+#togglePassword {
+    box-shadow: none !important;
+    border-color: #ced4da; 
+    
+}
+#eyeIcon {
+    font-size: 1.1rem;
+    line-height: 1;
+}

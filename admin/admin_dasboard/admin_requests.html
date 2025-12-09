@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Requests - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="admin_style.css"> 
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg ">
+        <div class="container-fluid container">
+            <a class="navbar-brand text-warning" href="admin_dashboard.html">ADMIN PANEL</a>
+        </div>
+    </nav>
+    <div class="container my-5">
+        <h1 class="fw-bold mb-5 text-primary">Pending Account Verification (15)</h1>
+        
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="bg-warning text-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>National ID</th>
+                    <th>Scanned National ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Ali Mohammed</td>
+                    <td>ali@eng.psu.edu.eg</td>
+                    <td>3010515xxxxxxx</td>
+                    <td><img src="scanned_id_ali.jpg" alt="Scanned National ID" style="max-width: 100px;"></td>
+                    <td>
+                        <button class="btn btn-success btn-sm me-2">Approve</button>
+                        <button class="btn btn-danger btn-sm">Reject</button>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>2</td>
+                    <td>Sara Hesham</td>
+                    <td>sara.h@eng.psu.edu.eg</td>
+                    <td>3021122xxxxxxx</td>
+                    <td><img src="scanned_id_sara.jpg" alt="Scanned National ID" style="max-width: 100px;"></td>
+                    <td>
+                        <button class="btn btn-success btn-sm me-2">Approve</button>
+                        <button class="btn btn-danger btn-sm">Reject</button>
+                    </td>
+                </tr>
+                
+                </tbody>
+        </table>
+        
+        <h3 class="fw-bold mt-5 mb-3 text-primary">Manage Active Students</h3>
+        <p class="text-muted">Access the full list of approved students for management tasks .</p>
+        <a href="admin-active-students.html" class="btn btn-primary">Go to Active Students List</a>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
