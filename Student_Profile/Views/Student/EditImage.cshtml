@@ -7,14 +7,18 @@
     <img src="~/uploads/student-profiles/@(Model.ExistingProfileImage ?? "default-avatar.png")" width="150" />
 </div>
 
+<!-- فورم رفع صورة جديدة -->
 <form asp-action="EditImage" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="ProfileImage">Upload New Image</label>
         <input asp-for="ProfileImage" type="file" class="form-control" />
     </div>
-
     <button type="submit" class="btn btn-primary mt-2">Update Image</button>
-    <a asp-action="RemoveProfileImage" class="btn btn-danger mt-2">Remove Image</a>
+</form>
+
+<!-- فورم إزالة الصورة -->
+<form asp-action="RemoveProfileImage" method="post" class="mt-2">
+    <button type="submit" class="btn btn-danger">Remove Image</button>
 </form>
 
 @section Scripts {

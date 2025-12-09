@@ -195,6 +195,7 @@ namespace Student_Profile.Controllers
             return RedirectToAction("EditProfile");
         }
 
+
         // 🔹 Helpers
         private async Task<string> SaveProfileImage(IFormFile image)
         {
