@@ -18,10 +18,14 @@ namespace Student_Profile.Models
         public string? Interests { get; set; }
         public string? Skills { get; set; }
 
+        public string Address { get; set; }
+        public string Department { get; set; } 
+        
+        [MaxLength(500)]
+        public string? Projects { get; set; }
+
         // 🔹 روابط
-        public string? GitHub { get; set; }
-        public string? LinkedIn { get; set; }
-        public string? EmailContact { get; set; }
+        public string? ContactInformation { get; set; }
 
         // 🔹 صورة البروفايل (اختيارية)
         public string? ProfileImageUrl { get; set; }

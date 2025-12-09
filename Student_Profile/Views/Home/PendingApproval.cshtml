@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Registration Pending";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg p-5 text-center border-warning" style="border-radius: 15px;">
+
+                <i class="bi bi-hourglass-split display-1 text-warning mb-4"></i>
+
+                <h2 class="card-title fw-bold text-dark">
+                    Registration Submitted Successfully!
+                </h2>
+
+                <hr>
+
+                <h4 class="text-secondary mb-4">
+                    Your account is currently <span class="text-warning fw-bolder">PENDING APPROVAL</span>.
+                </h4>
+
+                <p class="lead">
+                    Thank you for registering. The University Administration must now verify your Student ID and details.
+                </p>
+
+                <p class="mb-4">
+                    You will receive an **email notification** (Acceptance or Rejection) sent to your University Email within 24-48 hours.
+                    Until then, you cannot log in or create your profile page.
+                </p>
+
+                <a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg mt-3">
+                    Back to Home
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+

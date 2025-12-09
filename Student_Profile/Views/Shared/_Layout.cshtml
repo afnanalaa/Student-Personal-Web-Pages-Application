@@ -3,51 +3,76 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Student_Profile</title>
+    <title>@ViewData["Title"]</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/css/student/signup.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="~/Student_Profile.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Student_Profile</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                    <button type="submit" class="btn btn-link">Logout</button>
-                </form>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+        <div class="container-fluid">
+            @* رابط العلامة التجارية (الـ Home Page) *@
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">Port Said University</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <ul class="navbar-nav me-auto">
+                    @* 1. Home *@
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")"
+                           href="@Url.Action("Index", "Home")">Home</a>
+                    </li>
+
+                    @* 2. Students Directory *@
+                    <li class="nav-item">
+                        @* نفترض وجود StudentsController ودالة Directory لعرض دليل الطلاب *@
+                        <a class="nav-link" href="@Url.Action("Directory", "Students")">Students Directory</a>
+                    </li>
+
+                    @* 3. Login *@
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Login", "Account")">Login</a>
+                    </li>
+
+                    @* 4. Admin System *@
+                    <li class="nav-item">
+                        @* نفترض وجود AdminController ودالة Login للدخول *@
+                        <a class="nav-link text-warning" href="@Url.Action("Login", "Admin")" style="color:goldenrod;">Admin System</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    @* 5. Sign Up Button *@
+                    <li class="nav-item">
+                        <a class="btn btn-outline-success" href="@Url.Action("RegisterStudent", "Account")" style="color:white;">Sign Up Now</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+    
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Student_Profile - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <footer class="bg-dark text-white-50 text-center py-3">
+        <small>&copy; 2025 Port Said University - Computer And Control Engineering Department</small>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -2,33 +2,63 @@
 
 @{
     ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Login</h2>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5">
+            <div class="card shadow-lg p-4 p-md-5">
+                <h2 class="card-title text-center mb-4 text-primary fw-bold">Student Login</h2>
+                <p class="text-center text-muted border-bottom pb-3 mb-4">
+                    Access your personal profile using your University credentials.
+                </p>
 
-<form asp-action="Login" method="post">
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "loginForm" }))
+                {
+                    @Html.AntiForgeryToken() @* للأمان *@
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    @* 2. University Email *@
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">University Email Address</label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="s123456@eng.psu.edu.eg" required>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    @* 3. Password with Toggle Icon *@
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <div class="input-group">
+                            @* تحديد ID يدوياً لضمان عمل JavaScript *@
+                            <input asp-for="Password" type="password" class="form-control" id="password" required>
+
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i id="eyeIcon" class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    </div>
+                }
+
+                <div class="text-center mt-4">
+                    Don't have an account? <a href="@Url.Action("RegisterStudent", "Account")">Register here</a>
+                    <br>
+                    <small><a href="@Url.Action("Login", "Admin")" class="text-warning">Login as Admin</a></small>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <div class="form-group form-check">
-        <input asp-for="RememberMe" class="form-check-input" />
-        <label asp-for="RememberMe" class="form-check-label"></label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="~/js/student/signup.js"></script>
 }

@@ -18,6 +18,11 @@ namespace Student_Profile.Controllers
             return View();
         }
 
+        public IActionResult PendingApproval()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

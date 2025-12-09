@@ -1,0 +1,117 @@
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #343a40;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+}
+
+.navbar {
+    background-color: #004d99 !important; 
+    box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.2); 
+}
+.btn-info {
+    font-weight: 600;
+    background-color: #007bff;
+    border: 3px solid #007bff;
+    color:#f0f2f5
+}
+.btn-info:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    color:#f0f2f5;
+    transform: translateY(-2px);
+}
+.nav-link {
+    font-weight: 600;
+    color: #f0f2f5 !important; 
+}
+.nav-link:hover {
+    color: #d1ecf1 !important; 
+}
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+.btn-warning {
+    font-weight: 600;
+}
+
+.card {
+    border: none;
+    background-color: #ffffff;
+    border-radius: 18px; 
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); 
+    transition: all 0.3s ease;
+}
+
+.display-5 {
+    color: #007bff !important; 
+    font-weight: 800;
+}
+.border-bottom {
+    border-color: #ced4da !important;
+}
+
+#profilePhoto {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 5px solid #007bff !important;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card.bg-light {
+    background-color: #e9ecef !important; 
+    border-radius: 10px;
+}
+.text-secondary {
+    color: #5a6268 !important;
+    font-weight: 700;
+}
+.list-unstyled li {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+.list-unstyled a {
+    color: #007bff;
+    text-decoration: none;
+}
+.list-unstyled a:hover {
+    text-decoration: underline;
+}
+
+h3.text-primary {
+    color: #004d99 !important; 
+    font-weight: 700;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.3rem;
+    margin-bottom: 1.5rem !important;
+}
+p#shortBio {
+    font-size: 1.05rem;
+    color: #495057;
+}
+
+.badge.bg-secondary {
+    background-color: #6c757d !important; 
+    color: white;
+    font-size: 0.9rem;
+    padding: 0.6em 1em;
+    border-radius: 50rem; 
+}
+
+footer a {
+    font-weight: 600;
+}
+
+@media (min-width: 992px) {
+    .sticky-top {
+        position: sticky;
+        top: 20px; 
+    }
+}

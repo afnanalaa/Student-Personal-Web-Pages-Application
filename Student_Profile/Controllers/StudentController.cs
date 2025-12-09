@@ -21,7 +21,7 @@ namespace Student_Profile.Controllers
 
         // GET: Create Profile
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> CreateForm()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _context.Users.FindAsync(userId);
@@ -35,7 +35,7 @@ namespace Student_Profile.Controllers
 
         // POST: Create Profile
         [HttpPost]
-        public async Task<IActionResult> Create(StudentProfileViewModel model)
+        public async Task<IActionResult> CreateForm(StudentProfileViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -52,12 +52,13 @@ namespace Student_Profile.Controllers
             var profile = new StudentProfile
             {
                 UserId = userId,
+                Department = model.Department,
+                Address = model.Address,
                 Bio = model.Bio,
                 Interests = model.Interests,
                 Skills = model.Skills,
-                GitHub = model.GitHub,
-                LinkedIn = model.LinkedIn,
-                EmailContact = model.EmailContact,
+                Projects= model.Projects,
+                ContactInformation = model.ContactInformation,
                 ProfileImageUrl = fileName ?? defaultImage,
                 ProfileSlug = Guid.NewGuid().ToString("N")
             };
@@ -77,7 +78,7 @@ namespace Student_Profile.Controllers
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.UserId == userId);
 
-            if (profile == null) return RedirectToAction("Create");
+            if (profile == null) return RedirectToAction("CreateForm");
 
             return View(profile);
         }
@@ -88,16 +89,17 @@ namespace Student_Profile.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var profile = await _context.StudentProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
-            if (profile == null) return RedirectToAction("Create");
+            if (profile == null) return RedirectToAction("CreateForm");
 
             var model = new StudentProfileViewModel
             {
                 Bio = profile.Bio,
+                Address = profile.Address,
+                Department = profile.Department,
                 Interests = profile.Interests,
                 Skills = profile.Skills,
-                GitHub = profile.GitHub,
-                LinkedIn = profile.LinkedIn,
-                EmailContact = profile.EmailContact,
+                ContactInformation = profile.ContactInformation,
+                Projects = profile.Projects,
                 ExistingProfileImage = profile.ProfileImageUrl
             };
 
@@ -117,9 +119,10 @@ namespace Student_Profile.Controllers
             profile.Bio = model.Bio;
             profile.Interests = model.Interests;
             profile.Skills = model.Skills;
-            profile.GitHub = model.GitHub;
-            profile.LinkedIn = model.LinkedIn;
-            profile.EmailContact = model.EmailContact;
+            profile.Address = model.Address;
+            profile.Department = model.Department;
+            profile.Projects = model.Projects;
+            profile.ContactInformation = model.ContactInformation;
 
             if (model.ProfileImage != null)
             {

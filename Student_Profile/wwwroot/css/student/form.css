@@ -1,0 +1,174 @@
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-color: #f4f7f6;
+    --text-color: #2d3748;
+    --input-bg: #f8fafc;
+    --border-color: #e2e8f0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    padding: 40px 20px;
+    margin: 0;
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px; 
+    margin: 0 auto;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    animation: fadeInUp 0.7s ease-out;
+    border-top: 5px solid transparent;
+    background-image: linear-gradient(white, white), var(--primary-gradient);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+h2 {
+    color: #2d3748;
+    margin-top: 0;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+
+#cvForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px;
+}
+
+.form-group:has(#personalImage),
+.form-group:has(#address),
+.form-group:has(#bio),
+.form-group:has(#projects),
+.form-group:has(#skills),
+.form-group:has(#interests),
+.form-group:has(#contactInformation) ,
+.form-group:has(#department)
+{
+    grid-column: span 2;
+}
+
+@supports not selector(:has(*)) {
+    #cvForm { display: block; }
+    .form-group { margin-bottom: 20px; }
+}
+
+
+label { 
+    display: block; 
+    margin-bottom: 8px; 
+    font-weight: 500; 
+    color: #4a5568; 
+    font-size: 0.9rem;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--input-bg);
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    color: #333;
+}
+
+input:focus, textarea:focus {
+    background-color: white;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    outline: none;
+}
+
+textarea {
+    resize: vertical; 
+}
+
+input[type="file"] {
+    padding: 10px;
+    background: white;
+    border: 2px dashed #cbd5e0; 
+    cursor: pointer;
+}
+
+input[type="file"]:hover {
+    border-color: #667eea;
+    background-color: #fbfbffd8;
+}
+
+input[type="file"]::file-selector-button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-right: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #5a67d8;
+}
+
+.btn {
+    grid-column: span 2; 
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 600px) {
+    #cvForm {
+        grid-template-columns: 1fr;
+    }
+    .form-group:has(*) {
+        grid-column: span 1;
+    }
+}
