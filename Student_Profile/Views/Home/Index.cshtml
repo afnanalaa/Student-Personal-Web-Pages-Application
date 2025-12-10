@@ -1,22 +1,21 @@
-﻿
-
-@{
+﻿@{
     ViewData["Title"] = "Home";
-    Layout = "~/Views/Shared/_Layout.cshtml"; 
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-5">
+    <!-- Header -->
     <header class="text-center mb-5 p-5 bg-light rounded-3 shadow-sm">
         <h1 class="display-4 fw-bold text-primary">Engineering Students Personal Pages Platform</h1>
         <p class="lead">Share your CV, list your interests, and connect with the university community.</p>
     </header>
 
+    <!-- Start Journey / Discover Peers -->
     <section class="row">
         <div class="col-md-6 mb-4">
             <div class="card p-4 shadow-sm h-100">
                 <h3>Start Your Journey</h3>
                 <p>Register and fill in your details to create your unique personal page. (Requires Admin Approval)</p>
-                @* استخدام @Url.Action للربط بـ AccountController.Register *@
                 <a href="@Url.Action("RegisterStudent", "Account")" class="btn btn-primary mt-auto">Create New Account</a>
             </div>
         </div>
@@ -24,13 +23,13 @@
             <div class="card p-4 shadow-sm h-100">
                 <h3>Discover Your Peers</h3>
                 <p>Browse the student directory and learn about your colleagues' projects and interests.</p>
-                @* يجب إنشاء StudentsController و Action يدعى Directory لعرض دليل الطلاب *@
                 <a href="@Url.Action("Directory", "Students")" class="btn btn-outline-primary mt-auto">Browse Directory</a>
             </div>
         </div>
     </section>
 </div>
 
+<!-- Submit Complaint Section -->
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -43,26 +42,34 @@
                     Use this form to report technical issues, inappropriate content, or administrative complaints related to the platform or the department.
                 </p>
 
-                @* استخدام Html.BeginForm للربط بدالة SubmitComplaint في SupportController (كمثال) *@
-                @using (Html.BeginForm("SubmitComplaint", "Support", FormMethod.Post, new { id = "complaintForm" }))
+                @* الفورم مربوط بالـ ComplaintController *@
+                @using (Html.BeginForm("Create", "Complaint", FormMethod.Post, new { id = "complaintForm" }))
                 {
-                    @* (Optional: Add @Html.AntiForgeryToken() for security here) *@
+                    @Html.AntiForgeryToken()
 
                     <div class="mb-3">
                         <label for="subject" class="form-label fw-bold">Subject</label>
-                        @* استخدام Tag Helper أو Html.TextBoxFor *@
                         <input type="text" class="form-control" id="subject" name="subject" required>
                     </div>
 
                     <div class="mb-4">
-                        <label for="message" class="form-label fw-bold">Detailed Description of the Problem</label>
-                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        <label for="content" class="form-label fw-bold">Detailed Description of the Problem</label>
+                        <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 mt-2 submit-complaint-btn">Submit Complaint</button>
                 }
+
+                @* عرض رسالة النجاح بعد الإرسال *@
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+                }
+
+                @* رابط لرؤية كل الشكاوى *@
+                <a href="@Url.Action("MyComplaints", "Complaint")" class="btn btn-link mt-3">View My Complaints</a>
+
             </div>
         </div>
     </div>
 </div>
-

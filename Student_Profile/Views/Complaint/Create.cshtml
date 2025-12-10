@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Submit Complaint";
+}
+
+<div class="container mt-5">
+    <h2>Report an Issue / Complaint</h2>
+
+    @using (Html.BeginForm("Create", "Complaint", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label class="form-label">Subject</label>
+            <input type="text" class="form-control" name="subject" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Content</label>
+            <textarea class="form-control" name="content" rows="5" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Complaint</button>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+    }
+
+    <a href="@Url.Action("MyComplaints", "Complaint")" class="btn btn-link mt-3">View My Complaints</a>
+</div>

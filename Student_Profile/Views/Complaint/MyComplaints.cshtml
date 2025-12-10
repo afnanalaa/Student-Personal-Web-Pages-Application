@@ -1,0 +1,30 @@
+﻿@model List<Student_Profile.Models.Complaint>
+
+<div class="container mt-5">
+    <h2>My Complaints</h2>
+
+    @if (!Model.Any())
+    {
+        <p>You have not submitted any complaints yet.</p>
+    }
+    else
+    {
+        foreach (var complaint in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between">
+                    <strong>@complaint.Subject</strong>
+                    <span class="text-muted">@complaint.CreatedAt.ToString("g")</span>
+                </div>
+                <div class="card-body">
+                    <p>@complaint.Content</p>
+                    <span class="badge bg-info">@complaint.Status</span>
+                    @if (!string.IsNullOrEmpty(complaint.AdminComment))
+                    {
+                        <p class="mt-2"><strong>Admin Comment:</strong> @complaint.AdminComment</p>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,64 @@
+﻿@model List<Student_Profile.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Review Student Requests";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h1 class="fw-bold mb-4 text-primary">Pending Account Verification (@Model.Count)</h1>
+
+    @if (!Model.Any())
+    {
+        <p>No pending student accounts at the moment.</p>
+    }
+    else
+    {
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="bg-warning text-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>National ID</th>
+                    <th>Scanned ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var student = Model[i];
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@student.FullName</td>
+                        <td>@student.Email</td>
+                        <td>@student.NationalId</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(student.StudentCardImageORNationalUrl))
+                            {
+                                <img src="@student.StudentCardImageORNationalUrl" alt="Scanned ID" style="max-width: 100px;">
+                            }
+                        </td>
+                        <td>
+                            <form asp-action="ApproveStudent" method="post" class="d-inline">
+                                <input type="hidden" name="userId" value="@student.Id" />
+                                <button type="submit" class="btn btn-success btn-sm me-2">Approve</button>
+                            </form>
+
+                            <form asp-action="RejectStudent" method="post" class="d-inline">
+                                <input type="hidden" name="userId" value="@student.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+    }
+</div>

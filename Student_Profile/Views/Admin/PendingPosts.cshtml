@@ -1,0 +1,78 @@
+﻿@model List<Student_Profile.Models.Post>
+
+@{
+    ViewData["Title"] = "Pending Posts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="fw-bold mb-4 text-warning">Pending Posts (@Model.Count)</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No pending posts.</div>
+    }
+    else
+    {
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="bg-warning text-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Content</th>
+                    <th>Image</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var post = Model[i];
+                    <tr>
+                        <td>@(i + 1)</td>
+
+                        <td>@post.User?.FullName</td>
+
+                        <td>@post.User?.Email</td>
+
+                        <td>@post.Content</td>
+
+                        <td>
+                            @if (!string.IsNullOrEmpty(post.ImageFile))
+                            {
+                                <img src="@post.ImageFile"
+                                     style="max-width: 120px; border-radius: 6px;" />
+                            }
+                            else
+                            {
+                                <span>No Image</span>
+                            }
+                        </td>
+
+                        <td>@post.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+
+                        <td>
+                            <form asp-action="ApprovePost" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@post.Id" />
+                                <button class="btn btn-success btn-sm me-2">Approve</button>
+                            </form>
+
+                            <form asp-action="RejectPost" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@post.Id" />
+                                <button class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+    }
+</div>
