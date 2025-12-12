@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container my-5 text-center">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><i class="bi bi-x-octagon-fill me-2"></i> Access Denied</h4>
+        <p>You do not have permission to view this resource.</p>
+        <hr>
+        <p class="mb-0">Please log in with an authorized Admin account.</p>
+    </div>
+    <a href="@Url.Action("Login", "Admin")" class="btn btn-warning mt-3">Go to Admin Login</a>
+</div>

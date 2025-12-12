@@ -1,0 +1,70 @@
+﻿@model Student_Profile.Models.StudentProfile
+
+
+
+<main class="cv-container" id="cvContent">
+    <header class="cv-header">
+        <div class="detail">
+            <div class="profile-img-container">
+                <img id="displayImage"
+                     src="~/uploads/student-profiles/@Model.ProfileImageUrl"
+                     alt="Profile Picture"
+                     class="profile-img">
+            </div>
+            <div class="name-dept">
+                <h1 id="displayName">@Model.User.FullName</h1>
+                <p class="dept-title"><span id="displayDept">@Model.Department</span></p>
+            </div>
+        </div>
+        <div class="contact-info">
+            <container>
+                <div class="contact-item">
+                    @* عرض الرقم القومي من نموذج المستخدم *@
+                    <strong>National ID:</strong> <span id="displayId">@Model.User.NationalId</span>
+                </div>
+                <div class="contact-item">
+                    @* عرض البريد الإلكتروني من نموذج المستخدم *@
+                    <strong>Email:</strong> <span id="displayEmail">@Model.User.Email</span>
+                </div>
+                <div class="contact-item">
+                    @* عرض رابط التواصل (LinkedIn/GitHub) *@
+                    <strong>ContactInformation:</strong> <a id="displayLinkedIn" href="@Model.ContactInformation" target="_blank">@Model.ContactInformation</a>
+                </div>
+            </container>
+            <container>
+                <div class="contact-item">
+                    @* عرض رقم الهاتف من نموذج المستخدم *@
+                    <strong>Phone:</strong> <span id="displayPhone">@Model.User.PhoneNumber</span>
+                </div>
+                <div class="contact-item">
+                    @* عرض العنوان من نموذج الملف الشخصي *@
+                    <strong>Address:</strong> <span id="displayAddress">@Model.Address</span>
+                </div>
+            </container>
+        </div>
+    </header>
+
+    <div class="cv-body">
+
+        <section class="cv-section">
+            <h3>Professional Summary</h3>
+            <p id="displaySummary">@Model.Bio</p>
+        </section>
+
+        <section class="cv-section">
+            <h3>Projects</h3>
+            @* تقسيم النص إلى فقرات أو نقاط إذا كان مخزناً كنص طويل *@
+            <p id="displayProjects">@Html.Raw(Model.Projects.Replace("\n", "<br/>"))</p>
+        </section>
+
+        <section class="cv-section">
+            <h3>Skills</h3>
+            <p id="displaySkills">@Model.Skills</p>
+        </section>
+
+        <section class="cv-section">
+            <h3>Interests</h3>
+            <p id="displayInterests">@Model.Interests</p>
+        </section>
+    </div>
+</main>

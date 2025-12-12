@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Student_Profile.Models;
 using Student_Profile.Utility;
 using Student_Profile.ViewModels;
+using Student_Profile.Data;
 
 namespace Student_Profile.Controllers
 {
@@ -11,120 +14,143 @@ namespace Student_Profile.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager,
-                                 RoleManager<IdentityRole> roleManager,
-                                 SignInManager<ApplicationUser> signInManager)
+        public AccountController(
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            SignInManager<ApplicationUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
+        // ----------------- ACCESS DENIED -----------------
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        // ----------------- REGISTER STUDENT (GET) -----------------
         [HttpGet]
         public IActionResult RegisterStudent()
         {
             return View();
         }
 
+        // ----------------- REGISTER STUDENT (POST) -----------------
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterStudent(StudentRegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            string fileName = null;
+
+            // حفظ صورة البطاقة / الكارنيه
+            if (model.StudentCardOrNationalImage != null)
             {
-                string fileName = null;
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
 
-                // 1. حفظ ملف الإثبات على wwwroot/images
-                if (model.StudentCardOrNationalImage != null)
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                fileName = Guid.NewGuid() + Path.GetExtension(model.StudentCardOrNationalImage.FileName);
+                string filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    // يفضل استخدام Path.Combine مع WebRootPath بدلاً من Directory.GetCurrentDirectory() لبيئة ASP.NET Core
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    fileName = Guid.NewGuid() + Path.GetExtension(model.StudentCardOrNationalImage.FileName);
-                    string filePath = Path.Combine(uploadsFolder, fileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await model.StudentCardOrNationalImage.CopyToAsync(fileStream);
-                    }
-                }
-
-                // 2. إنشاء المستخدم وتعيين بياناته
-                // (يجب أن يحتوي نموذج ApplicationUser على خاصية لحالة الموافقة مثل IsApproved = false)
-                var user = new ApplicationUser
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    FullName = model.FullName,
-                    NationalId = model.NationalId,
-                    PhoneNumber = model.PhoneNumber,
-                    StudentCardImageORNationalUrl = "/images/" + fileName,
-
-                    // ************ التعديل الأهم لتطبيق الموافقة ************
-                    // يجب تعيين هذا الحقل false/Pending في النموذج
-                    EmailConfirmed = true // (يجب أن يتم تعديل هذا الحقل في قاعدة البيانات لاحقاً ليعكس Pending)
-                                          // إذا كان نموذج ApplicationUser يحتوي على خاصية IsApproved/Status، يجب تعيينها هنا إلى false/Pending
-                };
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                {
-                    // 3. إضافة الطالب إلى رول Student
-                    await _userManager.AddToRoleAsync(user, SD.Student);
-
-                    // 4. إلغاء تسجيل الدخول المباشر
-                    // *** تم حذف السطر: await _signInManager.SignInAsync(user, isPersistent: false); ***
-
-                    // 5. ************ الخطوة الحاسمة: التوجيه لصفحة انتظار الموافقة ************
-                    return RedirectToAction("PendingApproval", "Home");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
+                    await model.StudentCardOrNationalImage.CopyToAsync(fileStream);
                 }
             }
 
+            // إنشاء الطالب
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FullName = model.FullName,
+                NationalId = model.NationalId,
+                PhoneNumber = model.PhoneNumber,
+                StudentCardImageORNationalUrl = "/images/" + fileName,
+
+                // لو عندك نظام Approval
+                // EmailConfirmed = false,
+                // IsApproved = false
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, SD.Student);
+
+                // لا تسجّل الدخول مباشرة
+                return RedirectToAction("PendingApproval", "Home");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+
             return View(model);
         }
-        // GET: /Account/Login
+
+        // ----------------- LOGIN (GET) -----------------
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: /Account/Login
+        // ----------------- LOGIN (POST) -----------------
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
             {
-                var result = await _signInManager.PasswordSignInAsync(
-                    model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-
-                if (result.Succeeded)
-                {
-                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                        return Redirect(returnUrl);
-
-                    return RedirectToAction("Index", "Home");
-                }
-
                 ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
             }
 
-            return View(model);
+            // لو عندك System Approval
+            // if (!user.IsApproved)
+            // {
+            //     return RedirectToAction("PendingApproval", "Home");
+            // }
+
+            var result = await _signInManager.PasswordSignInAsync(
+                user, model.Password, model.RememberMe, lockoutOnFailure: false
+            );
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            }
+
+            // جلب بروفايل الطالب
+            var studentProfile = await _context.StudentProfiles
+                .FirstOrDefaultAsync(s => s.UserId == user.Id);
+
+            if (studentProfile == null)
+                return RedirectToAction("CreateForm", "Student");
+
+            return RedirectToAction("MyProfile", "Student", new { slug = studentProfile.ProfileSlug });
         }
 
-        // Logout
+        // ----------------- LOGOUT -----------------
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()

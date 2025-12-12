@@ -16,6 +16,9 @@ namespace Student_Profile.Models
 
         // 🔥 admin approval status
         public string AccountStatus { get; set; } = "Pending";
+
         // Pending | Approved | Rejected
+
+        public StudentProfile StudentProfile { get; set; }
     }
 }

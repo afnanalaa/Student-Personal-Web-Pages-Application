@@ -4,27 +4,142 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Student_Profile.Data;
 using Student_Profile.Models;
+using Student_Profile.ViewModels;
 
 namespace Student_Profile.Controllers
 {
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager )
         {
             _context = context;
             _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Index()
+        {
+            return View("Dashboard");
+
+          
+        }
+
+        // GET: عرض صفحة تسجيل الدخول
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Login()
+        {
+            return View("~/Views/Admin/Login.cshtml");
+        }
+
+        // POST: معالجة بيانات تسجيل الدخول
+    
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(
+                user.UserName,         
+                model.Password,
+                model.RememberMe,
+                lockoutOnFailure: false
+            );
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            }
+
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+            if (!isAdmin)
+            {
+                await _signInManager.SignOutAsync();
+                ModelState.AddModelError("", "Access Denied: Not authorized as Admin.");
+                return View(model);
+            }
+
+            return RedirectToAction("Dashboard", "Admin");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Dashboard()
+        {
+            
+            var studentUsers = await _userManager.GetUsersInRoleAsync("Student");
+            int totalApprovedStudents = studentUsers.Count(u => u.AccountStatus == "Approved");
+
+            // 2. حساب الطلبات المعلقة (Pending)
+            // - حساب الحسابات المعلقة
+            int pendingRegistrations = await _userManager.Users
+                                            .CountAsync(u => u.AccountStatus == "Pending");
+
+            // - حساب المنشورات المعلقة
+            int pendingPosts = await _context.Posts
+                                    .CountAsync(p => p.Status == "Pending");
+
+            int totalPendingRequests = pendingRegistrations + pendingPosts;
+
+            // 3. حساب المحتوى المُعلَّم (بافتراض أن جدول AdminAction يُسجل هذا)
+            // (هنا يمكنك جلب عدد المنشورات المبلغ عنها أو أي شكاوى)
+            int flaggedContentCount = 0; // يتم حسابها بناءً على منطقك الخاص
+
+            // 4. بناء نموذج العرض وتمريره
+            var viewModel = new AdminDashboardViewModel
+            {
+                TotalStudents = totalApprovedStudents,
+                PendingRequests = totalPendingRequests,
+                FlaggedContentCount = flaggedContentCount
+            };
+
+            return View(viewModel);
         }
 
         // GET: Pending student accounts
+
+        //public async Task<IActionResult> ReviewRequests()
+        //{
+        //    var pendingStudents = await _context.Users
+        //        .Where(u => u.AccountStatus == "Pending")
+        //        .ToListAsync();
+
+        //    var studentsWithRole = new List<ApplicationUser>();
+
+        //    foreach (var user in pendingStudents)
+        //    {
+        //        if (await _userManager.IsInRoleAsync(user, "Student"))
+        //        {
+        //            studentsWithRole.Add(user);
+        //        }
+        //    }
+
+        //    return View(studentsWithRole);
+        //}
         public async Task<IActionResult> ReviewRequests()
         {
-            var pendingStudents = await _context.Users
+            var pendingStudents = _context.Users
                 .Where(u => u.AccountStatus == "Pending")
-                .ToListAsync();
+                .ToList();
 
             var studentsWithRole = new List<ApplicationUser>();
 
@@ -36,10 +151,42 @@ namespace Student_Profile.Controllers
                 }
             }
 
-            return View(studentsWithRole);
+            var pendingPosts = _context.Posts
+                .Where(p => p.Status == "Pending")
+                .Include(p => p.User)
+                .ToList();
+
+            var model = new PendingRequestsViewModel
+            {
+                PendingAccounts = studentsWithRole,  
+                PendingPosts = pendingPosts
+            };
+
+            return View(model);
         }
 
-        // POST: Approve a student account
+
+
+        public IActionResult Moderation()
+        {
+            var vm = new ModerationViewModel
+            {
+                PendingPosts = _context.Posts
+                    .Include(p => p.User)
+                    .Where(p => p.Status == "Pending")
+                    .OrderByDescending(p => p.CreatedAt)
+                    .ToList(),
+
+                Complaints = _context.Complaints
+                    .Include(c => c.User)
+                    .Where(c => c.Status == "Pending")
+                    .OrderByDescending(c => c.CreatedAt)
+                    .ToList()
+            };
+
+            return View(vm);
+        }
+
         [HttpPost]
         public async Task<IActionResult> ApproveStudent(string userId)
         {
@@ -49,11 +196,22 @@ namespace Student_Profile.Controllers
             student.AccountStatus = "Approved";
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = $"Student {student.UserName} approved successfully!";
+            var adminAction = new AdminAction
+            {
+                StudentProfileId = null,                
+                AdminId = _userManager.GetUserId(User),  
+                Action = "Approved",
+                ActionDate = DateTime.Now
+            };
+
+            _context.AdminActions.Add(adminAction);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Student {student.FullName} approved successfully!";
             return RedirectToAction(nameof(ReviewRequests));
         }
 
-        // POST: Reject a student account
+
         [HttpPost]
         public async Task<IActionResult> RejectStudent(string userId)
         {
@@ -63,11 +221,23 @@ namespace Student_Profile.Controllers
             student.AccountStatus = "Rejected";
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = $"Student {student.UserName} rejected and deleted!";
+            var adminAction = new AdminAction
+            {
+                StudentProfileId = null,
+                AdminId = _userManager.GetUserId(User),
+                Action = "Rejected",
+                ActionDate = DateTime.Now
+            };
+
+            _context.AdminActions.Add(adminAction);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Student {student.FullName} rejected successfully!";
             return RedirectToAction(nameof(ReviewRequests));
         }
 
-        public async Task<IActionResult> ActiveRequests()
+
+        public async Task<IActionResult> ActiveStudents()
         {
             var pendingStudents = await _context.Users
                 .Where(u => u.AccountStatus == "Approved")
@@ -187,6 +357,15 @@ namespace Student_Profile.Controllers
             return RedirectToAction(nameof(Complaints));
         }
 
+      
+        [HttpPost]
+        [ValidateAntiForgeryToken] 
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
 
 
     }

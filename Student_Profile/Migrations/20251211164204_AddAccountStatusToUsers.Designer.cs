@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Student_Profile.Data;
 
@@ -11,9 +12,11 @@ using Student_Profile.Data;
 namespace Student_Profile.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251211164204_AddAccountStatusToUsers")]
+    partial class AddAccountStatusToUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -396,8 +399,7 @@ namespace Student_Profile.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("StudentProfiles");
                 });
@@ -507,18 +509,12 @@ namespace Student_Profile.Migrations
             modelBuilder.Entity("Student_Profile.Models.StudentProfile", b =>
                 {
                     b.HasOne("Student_Profile.Models.ApplicationUser", "User")
-                        .WithOne("StudentProfile")
-                        .HasForeignKey("Student_Profile.Models.StudentProfile", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Student_Profile.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("StudentProfile")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

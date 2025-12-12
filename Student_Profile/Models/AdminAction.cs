@@ -18,6 +18,12 @@ namespace Student_Profile.Models
         [ForeignKey("PostId")]
         public Post Post { get; set; }
 
+        // القرار اتخذ على شكوى (اختياري)
+        public int? ComplaintId { get; set; }
+        [ForeignKey("ComplaintId")]
+        public Complaint Complaint { get; set; }
+
+
         // الـ Admin اللي اتخذ القرار
         [Required]
         public string AdminId { get; set; }
@@ -30,5 +36,7 @@ namespace Student_Profile.Models
 
         // تاريخ اتخاذ القرار
         public DateTime ActionDate { get; set; } = DateTime.Now;
+
+      
     }
 }

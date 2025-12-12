@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Student_Profile.Data;
 using Student_Profile.Models;
+using Student_Profile.Services;
 using Student_Profile.Utility.DBInitializer;
 
 namespace Student_Profile
@@ -14,6 +16,7 @@ namespace Student_Profile
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
             builder.Services.AddDbContext<ApplicationDbContext>(option =>
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -24,6 +27,8 @@ namespace Student_Profile
                 options.Password.RequiredUniqueChars = 0;
                 options.SignIn.RequireConfirmedEmail = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             builder.Services.AddScoped<IDBInitializer, DBInitializer>();
             var app = builder.Build();
@@ -38,7 +43,7 @@ namespace Student_Profile
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseStaticFiles();
             app.UseAuthorization();
             using (var scope = app.Services.CreateScope())
             {

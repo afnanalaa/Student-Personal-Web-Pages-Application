@@ -17,9 +17,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\css\admin\" />
-    <Folder Include="wwwroot\js\admin\" />
-  </ItemGroup>
-
 </Project>

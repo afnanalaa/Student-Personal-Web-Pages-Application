@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Student_Profile.Data;
 using Student_Profile.Models;
 using Student_Profile.ViewModels;
@@ -12,11 +13,13 @@ namespace Student_Profile.Controllers
     public class StudentController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
         private readonly string defaultImage = "default-avatar.png";
 
-        public StudentController(ApplicationDbContext context)
+        public StudentController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Create Profile
@@ -35,6 +38,7 @@ namespace Student_Profile.Controllers
 
         // POST: Create Profile
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateForm(StudentProfileViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -57,7 +61,7 @@ namespace Student_Profile.Controllers
                 Bio = model.Bio,
                 Interests = model.Interests,
                 Skills = model.Skills,
-                Projects= model.Projects,
+                Projects = model.Projects,
                 ContactInformation = model.ContactInformation,
                 ProfileImageUrl = fileName ?? defaultImage,
                 ProfileSlug = Guid.NewGuid().ToString("N")
@@ -66,7 +70,8 @@ namespace Student_Profile.Controllers
             _context.StudentProfiles.Add(profile);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Details", new { slug = profile.ProfileSlug });
+            // إرسال slug كـ JSON ليعرفه الجافا
+            return Json(new { slug = profile.ProfileSlug });
         }
 
         // GET: MyProfile
@@ -74,14 +79,92 @@ namespace Student_Profile.Controllers
         public async Task<IActionResult> MyProfile()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // جلب البروفايل مع بيانات المستخدم
             var profile = await _context.StudentProfiles
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.UserId == userId);
 
-            if (profile == null) return RedirectToAction("CreateForm");
+            if (profile == null)
+                return RedirectToAction("CreateForm");
+
+            // جلب البوستات المعتمدة فقط
+            var approvedPosts = await _context.Posts
+          .Include(p => p.User) // تحميل بيانات المستخدم
+          .Include(p => p.User.StudentProfile) // 🎯 تحميل بيانات الملف الشخصي المرتبطة بالمستخدم
+           .Where(p => p.Status == "Approved")
+          .ToListAsync();
+
+            ViewBag.ApprovedPosts = approvedPosts;
 
             return View(profile);
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> StudentDashboard()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var profile = await _context.StudentProfiles
+                .Include(p => p.User) 
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (profile == null) return RedirectToAction("CreateForm");
+
+            return View("StudentDashboard", profile);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePost(PostViewModel model)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrWhiteSpace(model.Content) && model.ImageFile == null)
+            {
+                TempData["Error"] = "Post must contain either text content or an image.";
+                return RedirectToAction("MyProfile");
+            }
+
+            string imageUrl = null;
+
+            if (model.ImageFile != null)
+            {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string uploadPath = Path.Combine(wwwRootPath, "images", "posts");
+
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+
+                string fileName = Guid.NewGuid().ToString();
+                string extension = Path.GetExtension(model.ImageFile.FileName);
+
+                using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName + extension), FileMode.Create))
+                {
+                    await model.ImageFile.CopyToAsync(fileStream);
+                }
+
+                imageUrl = Path.Combine("/images/posts", fileName + extension).Replace('\\', '/');
+            }
+
+            var post = new Post
+            {
+                UserId = userId,
+                Content = model.Content,
+                ImageFile = imageUrl,
+                Status = "Pending", // 🔹 بوست جديد في حالة انتظار
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Posts.Add(post);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Your post has been submitted and is pending admin approval.";
+            return RedirectToAction("MyProfile");
+        }
+    
 
         // GET: EditProfile
         [HttpGet]
@@ -235,11 +318,12 @@ namespace Student_Profile.Controllers
         [HttpGet]
         public IActionResult Details(string slug)
         {
+            
             if (string.IsNullOrEmpty(slug))
                 return NotFound();
 
             var profile = _context.StudentProfiles
-                .Include(p => p.User) // 🔹 هنا
+                .Include(p => p.User) 
                 .FirstOrDefault(p => p.ProfileSlug == slug);
 
             if (profile == null)
@@ -247,6 +331,7 @@ namespace Student_Profile.Controllers
 
             return View(profile);
         }
+       
 
     }
 }

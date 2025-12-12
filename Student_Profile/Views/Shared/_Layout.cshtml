@@ -1,78 +1,112 @@
-﻿<!DOCTYPE html>
+﻿@* هذا الملف يجب حفظه باسم: Views/Shared/_Layout.cshtml *@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Port Said University</title>
+
+    @* 1. روابط Bootstrap و الأيقونات *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
-    @* <link rel="stylesheet" href="~/css/student/signup.css" asp-append-version="true" /> *@
-    <link rel="stylesheet" href="~/Student_Profile.styles.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    @* 2. ملفات الـ CSS المخصصة *@
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Student_Profile.styles.css" asp-append-version="true" />
+
+    @* 3. 🎯 كود Sticky Footer CSS *@
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            /* تفعيل Flexbox عمودياً */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 🎯 يجب أن يحمل العنصر الذي يحتوي على كل المحتوى المتغير خاصية flex: 1 */
+        .content-wrapper {
+            flex: 1; /* يأخذ كل المساحة المتاحة */
+            display: flex; /* لضمان أن المحتوى داخل Wrapper يمتد بشكل صحيح */
+            flex-direction: column;
+        }
+
+        /* تنسيقات الفوتر */
+        footer {
+            background-color: #212529;
+            color: #f8f9fa;
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
+            /* يجب أن يكون الفوتر خارج الـ content-wrapper ليلتصق بالأسفل */
+        }
+    </style>
 </head>
 <body>
 
-
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    @* ======================================================= *@
+    @* الـ NAVBAR                          *@
+    @* ======================================================= *@
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            @* رابط العلامة التجارية (الـ Home Page) *@
             <a class="navbar-brand" href="@Url.Action("Index", "Home")">Port Said University</a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarNav">
-
                 <ul class="navbar-nav me-auto">
-                    @* 1. Home *@
+                    @* روابط التنقل... *@
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")"
                            href="@Url.Action("Index", "Home")">Home</a>
                     </li>
-
-                    @* 2. Students Directory *@
                     <li class="nav-item">
-                        @* نفترض وجود StudentsController ودالة Directory لعرض دليل الطلاب *@
                         <a class="nav-link" href="@Url.Action("Directory", "Students")">Students Directory</a>
                     </li>
-
-                    @* 3. Login *@
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("Login", "Account")">Login</a>
                     </li>
-
-                    @* 4. Admin System *@
                     <li class="nav-item">
-                        @* نفترض وجود AdminController ودالة Login للدخول *@
-                        <a class="nav-link text-warning" href="@Url.Action("Login", "Admin")" style="color:goldenrod;">Admin System</a>
+                        <a class="nav-link text-warning" href="@Url.Action("Login", "Admin")">Admin System</a>
                     </li>
                 </ul>
 
                 <ul class="navbar-nav">
-                    @* 5. Sign Up Button *@
                     <li class="nav-item">
-                        <a class="btn btn-outline-success" href="@Url.Action("RegisterStudent", "Account")" style="color:white;">Sign Up Now</a>
+                        <a class="btn btn-success" href="@Url.Action("RegisterStudent", "Account")">Sign Up Now</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    @* ======================================================= *@
+    @* 🎯 الحاوية الرئيسية للمحتوى (Flex: 1)        *@
+    @* ======================================================= *@
+    <div class="content-wrapper">
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <footer class="bg-dark text-white-50 text-center py-3">
+    @* ======================================================= *@
+    @* الـ FOOTER                        *@
+    @* ======================================================= *@
+    <footer>
         <small>&copy; 2025 Port Said University - Computer And Control Engineering Department</small>
     </footer>
+
+    @* ======================================================= *@
+    @* الـ Scripts                       *@
+    @* ======================================================= *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

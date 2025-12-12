@@ -12,5 +12,8 @@ namespace Student_Profile.Data
         public DbSet<StudentProfile> StudentProfiles { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
+
+        public DbSet<AdminAction> AdminActions { get; set; }
+
     }
 }
