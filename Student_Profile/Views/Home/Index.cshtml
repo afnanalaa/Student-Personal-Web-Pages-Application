@@ -42,7 +42,6 @@
                     Use this form to report technical issues, inappropriate content, or administrative complaints related to the platform or the department.
                 </p>
 
-                @* الفورم مربوط بالـ ComplaintController *@
                 @using (Html.BeginForm("Create", "Complaint", FormMethod.Post, new { id = "complaintForm" }))
                 {
                     @Html.AntiForgeryToken()
@@ -60,14 +59,12 @@
                     <button type="submit" class="btn btn-primary w-100 mt-2 submit-complaint-btn">Submit Complaint</button>
                 }
 
-                @* عرض رسالة النجاح بعد الإرسال *@
                 @if (TempData["SuccessMessage"] != null)
                 {
                     <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
                 }
 
-                @* رابط لرؤية كل الشكاوى *@
-                <a href="@Url.Action("MyComplaints", "Complaint")" class="btn btn-link mt-3">View My Complaints</a>
+                @* <a href="@Url.Action("MyComplaints", "Complaint")" class="btn btn-link mt-3">View My Complaints</a> *@
 
             </div>
         </div>

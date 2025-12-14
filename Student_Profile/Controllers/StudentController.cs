@@ -80,7 +80,6 @@ namespace Student_Profile.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // جلب البروفايل مع بيانات المستخدم
             var profile = await _context.StudentProfiles
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.UserId == userId);
@@ -88,10 +87,9 @@ namespace Student_Profile.Controllers
             if (profile == null)
                 return RedirectToAction("CreateForm");
 
-            // جلب البوستات المعتمدة فقط
             var approvedPosts = await _context.Posts
-          .Include(p => p.User) // تحميل بيانات المستخدم
-          .Include(p => p.User.StudentProfile) // 🎯 تحميل بيانات الملف الشخصي المرتبطة بالمستخدم
+          .Include(p => p.User) 
+          .Include(p => p.User.StudentProfile) 
            .Where(p => p.Status == "Approved")
           .ToListAsync();
 
@@ -114,6 +112,26 @@ namespace Student_Profile.Controllers
 
             return View("StudentDashboard", profile);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReportPost(int postId)
+        {
+            var post = await _context.Posts.FindAsync(postId);
+            if (post == null)
+                return NotFound();
+
+            post.IsReported = true;
+            post.ReportsCount += 1;
+            post.Status = "Reported";
+
+
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "The post has been reported successfully.";
+            return RedirectToAction("MyProfile");
+        }
+
 
 
         [HttpPost]

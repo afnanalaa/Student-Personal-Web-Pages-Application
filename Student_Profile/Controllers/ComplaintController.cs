@@ -47,10 +47,9 @@ namespace Student_Profile.Controllers
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Complaint submitted successfully!";
-            return RedirectToAction("Create"); // العودة لنفس الصفحة بعد الإرسال
+            return RedirectToAction("Index","Home");
         }
 
-        // GET: عرض كل شكاوي الطالب
         public async Task<IActionResult> MyComplaints()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

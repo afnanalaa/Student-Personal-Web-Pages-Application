@@ -85,26 +85,31 @@ namespace Student_Profile.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Dashboard()
         {
-            
+            // 1️⃣ الطلاب المعتمدين
             var studentUsers = await _userManager.GetUsersInRoleAsync("Student");
             int totalApprovedStudents = studentUsers.Count(u => u.AccountStatus == "Approved");
 
-            // 2. حساب الطلبات المعلقة (Pending)
-            // - حساب الحسابات المعلقة
+            // 2️⃣ طلبات التسجيل المعلقة
             int pendingRegistrations = await _userManager.Users
                                             .CountAsync(u => u.AccountStatus == "Pending");
 
-            // - حساب المنشورات المعلقة
+            // 3️⃣ البوستات المعلقة
             int pendingPosts = await _context.Posts
                                     .CountAsync(p => p.Status == "Pending");
 
             int totalPendingRequests = pendingRegistrations + pendingPosts;
 
-            // 3. حساب المحتوى المُعلَّم (بافتراض أن جدول AdminAction يُسجل هذا)
-            // (هنا يمكنك جلب عدد المنشورات المبلغ عنها أو أي شكاوى)
-            int flaggedContentCount = 0; // يتم حسابها بناءً على منطقك الخاص
+            // ⭐ 4️⃣ المحتوى المبلّغ عنه + الشكاوى
 
-            // 4. بناء نموذج العرض وتمريره
+            int reportedPosts = await _context.Posts
+                                    .CountAsync(p => p.IsReported == true);
+
+
+            int unresolvedComplaints = await _context.Complaints
+                                    .CountAsync(c => c.Status=="Pending");
+
+            int flaggedContentCount = reportedPosts + unresolvedComplaints;
+
             var viewModel = new AdminDashboardViewModel
             {
                 TotalStudents = totalApprovedStudents,
@@ -114,6 +119,7 @@ namespace Student_Profile.Controllers
 
             return View(viewModel);
         }
+
 
         // GET: Pending student accounts
 

@@ -1,20 +1,16 @@
-﻿@* هذا الملف يجب حفظه باسم: Views/Shared/_Layout.cshtml *@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Port Said University</title>
 
-    @* 1. روابط Bootstrap و الأيقونات *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
-    @* 2. ملفات الـ CSS المخصصة *@
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Student_Profile.styles.css" asp-append-version="true" />
 
-    @* 3. 🎯 كود Sticky Footer CSS *@
     <style>
         html, body {
             height: 100%;
@@ -22,35 +18,29 @@
         }
 
         body {
-            /* تفعيل Flexbox عمودياً */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        /* 🎯 يجب أن يحمل العنصر الذي يحتوي على كل المحتوى المتغير خاصية flex: 1 */
         .content-wrapper {
-            flex: 1; /* يأخذ كل المساحة المتاحة */
-            display: flex; /* لضمان أن المحتوى داخل Wrapper يمتد بشكل صحيح */
+            flex: 1; 
+            display: flex; 
             flex-direction: column;
         }
 
-        /* تنسيقات الفوتر */
         footer {
             background-color: #212529;
             color: #f8f9fa;
             text-align: center;
             padding: 1rem 0;
             width: 100%;
-            /* يجب أن يكون الفوتر خارج الـ content-wrapper ليلتصق بالأسفل */
         }
     </style>
 </head>
 <body>
 
-    @* ======================================================= *@
-    @* الـ NAVBAR                          *@
-    @* ======================================================= *@
+  
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="@Url.Action("Index", "Home")">Port Said University</a>
@@ -59,7 +49,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    @* روابط التنقل... *@
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")"
                            href="@Url.Action("Index", "Home")">Home</a>
@@ -77,16 +66,14 @@
 
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="btn btn-success" href="@Url.Action("RegisterStudent", "Account")">Sign Up Now</a>
+                        <a class="btn btn-success" href="@Url.Action("RegisterStudent", "Account")" style="color:white;">Sign Up Now</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    @* ======================================================= *@
-    @* 🎯 الحاوية الرئيسية للمحتوى (Flex: 1)        *@
-    @* ======================================================= *@
+  
     <div class="content-wrapper">
         <div class="container">
             <main role="main" class="pb-3">

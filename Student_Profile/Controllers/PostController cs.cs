@@ -92,6 +92,21 @@ namespace Student_Profile.Controllers
             return RedirectToAction("MyPosts");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ReportPost(int postId)
+        {
+            var post = await _context.Posts.FindAsync(postId);
+            if (post == null) return NotFound();
+
+            post.IsReported = true;
+            post.ReportsCount += 1;
+
+            await _context.SaveChangesAsync();
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> EditPost(int id)

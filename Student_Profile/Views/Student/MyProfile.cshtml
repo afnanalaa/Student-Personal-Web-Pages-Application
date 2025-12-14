@@ -88,16 +88,29 @@
                                     </div>
                                 </div>
                                 <p class="card-text">@post.Content</p>
-                                @* @if (!string.IsNullOrEmpty(post.ImageFile))
-                                {
-                                    <img src="~/@post.ImageFile" class="img-fluid rounded mb-3" alt="Post Image">
-                                } *@
+                               
                                 @if (!string.IsNullOrEmpty(post.ImageFile))
                                 {
-                                    // 🎯 الحل: استخدم المسار المخزن مباشرة (بدون ~/)
                                     <img src="@post.ImageFile" class="img-fluid rounded mb-3" alt="Post Image">
 
                                 }
+
+                                <div class="d-flex justify-content-end">
+                                    <form asp-action="ReportPost"
+                                          asp-controller="Student"
+                                          method="post"
+                                          onsubmit="return confirm('Are you sure you want to report this post?');">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden" name="postId" value="@post.Id" />
+
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-flag-fill"></i> Report
+                                        </button>
+                                    </form>
+                                </div>
+
                             </div>
                         </div>
                     }

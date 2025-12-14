@@ -22,7 +22,13 @@ namespace Student_Profile.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Admin Approval
-        public string Status { get; set; } = "Pending";
         // Pending, Approved, Rejected
+
+        public string Status { get; set; } = "Pending";
+
+        public bool IsReported { get; set; } = false;
+        public int ReportsCount { get; set; } = 0;
+
+
     }
 }

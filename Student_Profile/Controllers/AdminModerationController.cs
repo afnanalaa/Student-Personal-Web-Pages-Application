@@ -14,27 +14,31 @@ namespace Student_Profile.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index() 
         {
+            //var reportedPosts = await _context.Posts
+            //    .Include(p => p.User)
+            //    .Where(p => p.IsReported == true )
+            //    .ToListAsync(); 
+
             var vm = new ModerationViewModel
             {
-                PendingPosts = _context.Posts
-                    .Include(p => p.User)
-                    .Where(p => p.Status == "Pending")
-                    .OrderByDescending(p => p.CreatedAt)
-                    .ToList(),
-
-                Complaints = _context.Complaints
+               
+                Complaints = await _context.Complaints
                     .Include(c => c.User)
                     .Where(c => c.Status == "Pending")
                     .OrderByDescending(c => c.CreatedAt)
-                    .ToList()
+                    .ToListAsync(),
+                ReportedPosts = await _context.Posts
+                    .Include(p => p.User)
+                    .Where(p => p.IsReported == true)
+                    .OrderByDescending(p => p.ReportsCount)
+                    .ToListAsync()
+
             };
 
             return View("~/Views/Admin/Moderation.cshtml", vm);
         }
-
-        // ========================
         // Approve / Reject Post Actions
         // ========================
         [HttpPost]
@@ -61,9 +65,7 @@ namespace Student_Profile.Controllers
             return RedirectToAction("Index");
         }
 
-        // ========================
         // Solve Complaint Action
-        // ========================
         [HttpPost]
         public IActionResult SolveComplaint(int id)
         {
