@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Student_Profile.Models.Post>
+
+@{
+    ViewData["Title"] = "Reported Posts";
+}
+
+<h1 class="mb-4 text-danger">🚨 Reported Posts</h1>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Content</th>
+            <th>Image</th>
+            <th>Status</th>
+            <th>Reports Count</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            int i = 1;
+            foreach (var post in Model)
+            {
+                        <tr>
+                            <td>@i</td>
+                            <td>@post.User.FullName (@post.User.Email)</td>
+                            <td>@post.Content</td>
+                            <td>
+                        @if (!string.IsNullOrEmpty(post.ImageFile))
+                        {
+                                        <img src="~/uploads/@post.ImageFile" alt="Post Image" width="100" />
+                        }
+                            </td>
+                            <td>@post.Status</td>
+                            <td>@post.ReportsCount</td>
+                            <td>@post.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                        </tr>
+                i++;
+            }
+        }
+        else
+        {
+                <tr>
+                    <td colspan="7" class="text-center">No reported posts found.</td>
+                </tr>
+        }
+    </tbody>
+</table>

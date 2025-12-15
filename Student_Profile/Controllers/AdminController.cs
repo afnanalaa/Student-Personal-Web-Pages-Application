@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Student_Profile.Data;
@@ -14,11 +15,14 @@ namespace Student_Profile.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager )
+        private IEmailSender _emailSender;
+        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailSender= emailSender;
         }
 
         [HttpGet]
@@ -192,6 +196,31 @@ namespace Student_Profile.Controllers
 
             return View(vm);
         }
+        // without mail message to student to know if he approved or not :)
+        //[HttpPost]
+        //public async Task<IActionResult> ApproveStudent(string userId)
+        //{
+        //    var student = await _context.Users.FindAsync(userId);
+        //    if (student == null) return NotFound();
+
+        //    student.AccountStatus = "Approved";
+        //    await _context.SaveChangesAsync();
+
+        //    var adminAction = new AdminAction
+        //    {
+        //        StudentProfileId = null,                
+        //        AdminId = _userManager.GetUserId(User),  
+        //        Action = "Approved",
+        //        ActionDate = DateTime.Now
+        //    };
+
+        //    _context.AdminActions.Add(adminAction);
+        //    await _context.SaveChangesAsync();
+
+        //    TempData["SuccessMessage"] = $"Student {student.FullName} approved successfully!";
+        //    return RedirectToAction(nameof(ReviewRequests));
+        //}
+
 
         [HttpPost]
         public async Task<IActionResult> ApproveStudent(string userId)
@@ -202,16 +231,48 @@ namespace Student_Profile.Controllers
             student.AccountStatus = "Approved";
             await _context.SaveChangesAsync();
 
-            var adminAction = new AdminAction
+            //var adminAction = new AdminAction
+            //{
+            //    StudentProfileId = null,
+            //    AdminId = _userManager.GetUserId(User),
+            //    Action = "Approved",
+            //    ActionDate = DateTime.Now
+            //};
+
+            //_context.AdminActions.Add(adminAction);
+            //await _context.SaveChangesAsync();
+
+            var actionRecord = new AdminAction
             {
-                StudentProfileId = null,                
-                AdminId = _userManager.GetUserId(User),  
+                StudentProfileId = student.Id != null ? student.StudentProfile?.Id : null,
+                AdminId = _userManager.GetUserId(User),
                 Action = "Approved",
                 ActionDate = DateTime.Now
             };
 
-            _context.AdminActions.Add(adminAction);
+            _context.AdminActions.Add(actionRecord);
             await _context.SaveChangesAsync();
+
+            // 🔥 EMAIL PART
+            var loginUrl = Url.Action("Login", "Account", null, Request.Scheme);
+
+            var emailBody = $@"
+        <h2>🎉 Account Approved</h2>
+        <p>Hello <b>{student.FullName}</b>,</p>
+        <p>Your account has been approved successfully.</p>
+        <p>
+            <a href='{loginUrl}' 
+               style='padding:10px 15px;background:#198754;color:white;text-decoration:none;'>
+               Login Now
+            </a>
+        </p>
+    ";
+
+            await _emailSender.SendEmailAsync(
+                student.Email,
+                "Your Account Has Been Approved",
+                emailBody
+            );
 
             TempData["SuccessMessage"] = $"Student {student.FullName} approved successfully!";
             return RedirectToAction(nameof(ReviewRequests));
@@ -227,15 +288,26 @@ namespace Student_Profile.Controllers
             student.AccountStatus = "Rejected";
             await _context.SaveChangesAsync();
 
-            var adminAction = new AdminAction
+            //var adminAction = new AdminAction
+            //{
+            //    StudentProfileId = null,
+            //    AdminId = _userManager.GetUserId(User),
+            //    Action = "Rejected",
+            //    ActionDate = DateTime.Now
+            //};
+
+            //_context.AdminActions.Add(adminAction);
+            //await _context.SaveChangesAsync();
+
+            var actionRecord = new AdminAction
             {
-                StudentProfileId = null,
+                StudentProfileId = student.Id != null ? student.StudentProfile?.Id : null,
                 AdminId = _userManager.GetUserId(User),
-                Action = "Rejected",
+                Action = "Approved",
                 ActionDate = DateTime.Now
             };
 
-            _context.AdminActions.Add(adminAction);
+            _context.AdminActions.Add(actionRecord);
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = $"Student {student.FullName} rejected successfully!";
@@ -279,6 +351,16 @@ namespace Student_Profile.Controllers
 
             post.Status = "Approved";
             await _context.SaveChangesAsync();
+
+            //var actionRecord = new AdminAction
+            //{
+            //    PostId = post.Id,
+            //    AdminId = _userManager.GetUserId(User),
+            //    Action = "Approved",
+            //    ActionDate = DateTime.Now
+            //};
+            //_context.AdminActions.Add(actionRecord);
+            //await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Post approved successfully!";
             return RedirectToAction(nameof(PendingPosts));
@@ -373,6 +455,16 @@ namespace Student_Profile.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public async Task<IActionResult> ReportedPosts()
+        {
+            
+            var reportedPosts = await _context.Posts
+                .Include(p => p.User) 
+                .Where(p => p.IsReported == true)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
 
+            return View(reportedPosts);
+        }
     }
 }
