@@ -15,5 +15,7 @@ namespace Student_Profile.Data
 
         public DbSet<AdminAction> AdminActions { get; set; }
 
+        public DbSet<BannedWord> BannedWords { get; set; }
+
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Student_Profile.Data;
 using Student_Profile.Models;
+using Student_Profile.Services;
 using Student_Profile.ViewModels;
 using System.Security.Claims;
 
@@ -15,12 +17,37 @@ namespace Student_Profile.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly string defaultImage = "default-avatar.png";
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ContentFilterService _filterService; 
 
-        public StudentController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
+        public StudentController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment, UserManager<ApplicationUser> userManager, ContentFilterService filterService)
         {
             _context = context;
             _hostEnvironment = hostEnvironment;
+            _userManager = userManager;
+            _filterService = filterService;
         }
+
+        //[AllowAnonymous]
+        //[Route("Student/Directory")] 
+        //public async Task<IActionResult> Index(string search)
+        //{
+        //    var query = _context.StudentProfiles
+        //        .Include(p => p.User)
+        //        .Where(p => p.User.AccountStatus == "Approved")
+        //        .AsQueryable();
+
+        //    if (!string.IsNullOrEmpty(search))
+        //    {
+        //        query = query.Where(p => p.User.FullName.Contains(search) ||
+        //                                 p.Skills.Contains(search) ||
+        //                                 p.Department.Contains(search));
+        //    }
+
+        //    var students = await query.ToListAsync();
+
+        //    return View(students);
+        //}
 
         // GET: Create Profile
         [HttpGet]
@@ -110,8 +137,17 @@ namespace Student_Profile.Controllers
 
             if (profile == null) return RedirectToAction("CreateForm");
 
+            var complaints = await _context.Complaints
+            .Where(c => c.UserId == userId)
+            .OrderByDescending(c => c.CreatedAt)
+            .ToListAsync();
+
+            ViewBag.UserComplaints = complaints;
+
             return View("StudentDashboard", profile);
         }
+
+       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -138,11 +174,18 @@ namespace Student_Profile.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost(PostViewModel model)
         {
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrWhiteSpace(model.Content) && model.ImageFile == null)
             {
                 TempData["Error"] = "Post must contain either text content or an image.";
+                return RedirectToAction("MyProfile");
+            }
+
+            if (await _filterService.ContainsProhibitedContent(model.Content))
+            {
+                TempData["Error"] = "Your post contains restricted language.";
                 return RedirectToAction("MyProfile");
             }
 
@@ -190,6 +233,7 @@ namespace Student_Profile.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var profile = await _context.StudentProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
+
             if (profile == null) return RedirectToAction("CreateForm");
 
             var model = new StudentProfileViewModel
@@ -209,12 +253,27 @@ namespace Student_Profile.Controllers
 
         // POST: EditProfile
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProfile(StudentProfileViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
+            // 🎯 1. فحص المحتوى غير اللائق (Automatic Blocking)
+            // قمت بإضافة فحص للمشاريع (Projects) أيضاً لزيادة الأمان
+            if (await _filterService.ContainsProhibitedContent(model.Bio) ||
+                await _filterService.ContainsProhibitedContent(model.Skills) ||
+                await _filterService.ContainsProhibitedContent(model.Projects))
+            {
+                // إخطار المستخدم بالمنع
+                ModelState.AddModelError("", "Action Denied: Your profile content contains words restricted by the university policy.");
+
+                // يمكنك هنا اختيارياً تسجيل محاولة الاختراق في جدول تنبيهات للأدمن (Alerts)
+                return View(model);
+            }
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var profile = await _context.StudentProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
+
             if (profile == null) return NotFound();
 
             profile.Bio = model.Bio;
@@ -231,15 +290,11 @@ namespace Student_Profile.Controllers
                 {
                     DeleteProfileImage(profile.ProfileImageUrl);
                 }
-
                 profile.ProfileImageUrl = await SaveProfileImage(model.ProfileImage);
-            }
-            else if (string.IsNullOrEmpty(profile.ProfileImageUrl))
-            {
-                profile.ProfileImageUrl = defaultImage;
             }
 
             await _context.SaveChangesAsync();
+            TempData["Success"] = "Profile updated successfully.";
             return RedirectToAction("MyProfile");
         }
 
@@ -349,6 +404,10 @@ namespace Student_Profile.Controllers
 
             return View(profile);
         }
+
+
+
+
        
 
     }

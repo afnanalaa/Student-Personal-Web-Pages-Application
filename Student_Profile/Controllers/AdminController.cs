@@ -125,26 +125,6 @@ namespace Student_Profile.Controllers
         }
 
 
-        // GET: Pending student accounts
-
-        //public async Task<IActionResult> ReviewRequests()
-        //{
-        //    var pendingStudents = await _context.Users
-        //        .Where(u => u.AccountStatus == "Pending")
-        //        .ToListAsync();
-
-        //    var studentsWithRole = new List<ApplicationUser>();
-
-        //    foreach (var user in pendingStudents)
-        //    {
-        //        if (await _userManager.IsInRoleAsync(user, "Student"))
-        //        {
-        //            studentsWithRole.Add(user);
-        //        }
-        //    }
-
-        //    return View(studentsWithRole);
-        //}
         public async Task<IActionResult> ReviewRequests()
         {
             var pendingStudents = _context.Users
@@ -176,52 +156,6 @@ namespace Student_Profile.Controllers
         }
 
 
-
-        public IActionResult Moderation()
-        {
-            var vm = new ModerationViewModel
-            {
-                PendingPosts = _context.Posts
-                    .Include(p => p.User)
-                    .Where(p => p.Status == "Pending")
-                    .OrderByDescending(p => p.CreatedAt)
-                    .ToList(),
-
-                Complaints = _context.Complaints
-                    .Include(c => c.User)
-                    .Where(c => c.Status == "Pending")
-                    .OrderByDescending(c => c.CreatedAt)
-                    .ToList()
-            };
-
-            return View(vm);
-        }
-        // without mail message to student to know if he approved or not :)
-        //[HttpPost]
-        //public async Task<IActionResult> ApproveStudent(string userId)
-        //{
-        //    var student = await _context.Users.FindAsync(userId);
-        //    if (student == null) return NotFound();
-
-        //    student.AccountStatus = "Approved";
-        //    await _context.SaveChangesAsync();
-
-        //    var adminAction = new AdminAction
-        //    {
-        //        StudentProfileId = null,                
-        //        AdminId = _userManager.GetUserId(User),  
-        //        Action = "Approved",
-        //        ActionDate = DateTime.Now
-        //    };
-
-        //    _context.AdminActions.Add(adminAction);
-        //    await _context.SaveChangesAsync();
-
-        //    TempData["SuccessMessage"] = $"Student {student.FullName} approved successfully!";
-        //    return RedirectToAction(nameof(ReviewRequests));
-        //}
-
-
         [HttpPost]
         public async Task<IActionResult> ApproveStudent(string userId)
         {
@@ -231,16 +165,7 @@ namespace Student_Profile.Controllers
             student.AccountStatus = "Approved";
             await _context.SaveChangesAsync();
 
-            //var adminAction = new AdminAction
-            //{
-            //    StudentProfileId = null,
-            //    AdminId = _userManager.GetUserId(User),
-            //    Action = "Approved",
-            //    ActionDate = DateTime.Now
-            //};
-
-            //_context.AdminActions.Add(adminAction);
-            //await _context.SaveChangesAsync();
+           
 
             var actionRecord = new AdminAction
             {
@@ -262,11 +187,11 @@ namespace Student_Profile.Controllers
         <p>Your account has been approved successfully.</p>
         <p>
             <a href='{loginUrl}' 
-               style='padding:10px 15px;background:#198754;color:white;text-decoration:none;'>
+               style='padding:10px 15px;background:#198754;color:white;text-decoration:none; margin-top:20px;'>
                Login Now
             </a>
         </p>
-    ";
+           ";
 
             await _emailSender.SendEmailAsync(
                 student.Email,
@@ -288,17 +213,6 @@ namespace Student_Profile.Controllers
             student.AccountStatus = "Rejected";
             await _context.SaveChangesAsync();
 
-            //var adminAction = new AdminAction
-            //{
-            //    StudentProfileId = null,
-            //    AdminId = _userManager.GetUserId(User),
-            //    Action = "Rejected",
-            //    ActionDate = DateTime.Now
-            //};
-
-            //_context.AdminActions.Add(adminAction);
-            //await _context.SaveChangesAsync();
-
             var actionRecord = new AdminAction
             {
                 StudentProfileId = student.Id != null ? student.StudentProfile?.Id : null,
@@ -315,15 +229,16 @@ namespace Student_Profile.Controllers
         }
 
 
+        [HttpGet]
         public async Task<IActionResult> ActiveStudents()
         {
-            var pendingStudents = await _context.Users
-                .Where(u => u.AccountStatus == "Approved")
+            var students = await _userManager.Users
+                .Where(u => u.AccountStatus == "Approved" || u.AccountStatus == "Graduated")
                 .ToListAsync();
 
             var studentsWithRole = new List<ApplicationUser>();
 
-            foreach (var user in pendingStudents)
+            foreach (var user in students)
             {
                 if (await _userManager.IsInRoleAsync(user, "Student"))
                 {
@@ -333,6 +248,55 @@ namespace Student_Profile.Controllers
 
             return View(studentsWithRole);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteStudent(string userId)
+        {
+            var student = await _userManager.FindByIdAsync(userId);
+            if (student == null) return NotFound();
+
+            var profile = await _context.StudentProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
+            if (profile != null)
+            {
+                _context.StudentProfiles.Remove(profile);
+            }
+
+            var result = await _userManager.DeleteAsync(student);
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = $"Student {student.FullName} has been deleted successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Error occurred while deleting the student.";
+            }
+
+            return RedirectToAction(nameof(ActiveStudents));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsGraduated(string userId)
+        {
+            var student = await _userManager.FindByIdAsync(userId);
+            if (student == null) return NotFound();
+
+            student.AccountStatus = "Graduated";
+            var result = await _userManager.UpdateAsync(student);
+
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = $"Student {student.FullName} is now marked as Graduated.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to update student status.";
+            }
+
+            return RedirectToAction(nameof(ActiveStudents));
+        }
+
 
         public async Task<IActionResult> PendingPosts()
         {

@@ -1,12 +1,11 @@
-/* ---------------- ãÊÛíÑÇÊ ÇáÃáæÇä ---------------- */
+ï»¿/* ---------------- Ù…ØªØºÙŠØ±Ø§Øª Ø§Ù„Ø£Ù„ÙˆØ§Ù† ---------------- */
 :root {
-    --primary-color: #0077B6; /* ÃÒÑŞ ÇÍÊÑÇİí */
-    --secondary-color: #333333; /* áæä ÇáäÕæÕ ÇáÏÇßä */
-    --accent-bg: #F4F7F9; /* ÎáİíÉ ÑãÇÏíÉ İÇÊÍÉ ááãÚáæãÇÊ ÇáÌÇäÈíÉ */
+    --primary-color: #0077B6; /* Ø£Ø²Ø±Ù‚ Ø§Ø­ØªØ±Ø§ÙÙŠ */
+    --secondary-color: #333333; /* Ù„ÙˆÙ† Ø§Ù„Ù†ØµÙˆØµ Ø§Ù„Ø¯Ø§ÙƒÙ† */
+    --accent-bg: #F4F7F9; /* Ø®Ù„ÙÙŠØ© Ø±Ù…Ø§Ø¯ÙŠØ© ÙØ§ØªØ­Ø© Ù„Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ø¬Ø§Ù†Ø¨ÙŠØ© */
     --light-border: #EEEEEE;
 }
 
-/* ---------------- CV CONTAINER (ÇáäØÇŞ ÇáÑÆíÓí) ---------------- */
 .cv-container {
     max-width: 850px;
     margin: 30px auto;
@@ -20,81 +19,92 @@
     color: var(--secondary-color);
 }
 
-    /* ---------------- ÇáÑÃÓ (Header) - ÇáÊİÇÕíá ÇáÔÎÕíÉ ---------------- */
-
+   /*header
+      */
     .cv-container .cv-header {
         display: flex;
-        align-items: flex-start; /* ãÍÇĞÇÉ ÇáÚäÇÕÑ ááÃÚáì */
-        padding-bottom: 20px;
-        margin-bottom: 25px;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 25px;
+        margin-bottom: 30px;
         border-bottom: 3px solid var(--primary-color);
+        flex-wrap: wrap; /* ğŸ¯ Ù„Ù„Ø³Ù…Ø§Ø­ Ù„Ù„Ø¹Ù†Ø§ØµØ± Ø¨Ø§Ù„Ù†Ø²ÙˆÙ„ Ø³Ø·Ø± Ø¬Ø¯ÙŠØ¯ Ø¹Ù†Ø¯ Ø¶ÙŠÙ‚ Ø§Ù„Ù…Ø³Ø§Ø­Ø© */
+        gap: 20px;
     }
 
     .cv-container .detail {
         display: flex;
         flex-direction: row;
         align-items: center;
-        width: 50%;
+        flex: 1;
+        min-width: 280px; /* Ø¶Ù…Ø§Ù† Ø¹Ø¯Ù… Ø¶ØºØ· Ø§Ù„Ø§Ø³Ù… ÙˆØ§Ù„ØµÙˆØ±Ø© */
     }
 
     .cv-container .name-dept {
         text-align: left;
+        margin-left: 20px;
     }
 
-    .cv-container h1 {
-        font-size: 2.2rem;
-        color: var(--primary-color);
-        margin: 0;
-        font-weight: 700;
-    }
-
-    .cv-container .dept-title {
-        font-size: 1.1rem;
-        color: #666;
-        margin-top: 5px;
-    }
-
-    .cv-container .profile-img-container {
+    .cv-container .profile-img-container img {
         width: 100px;
         height: 100px;
-        margin-right: 25px;
         border-radius: 50%;
-        overflow: hidden;
+        object-fit: cover;
         border: 3px solid var(--primary-color);
-        flex-shrink: 0; /* ãäÚ ÇáÕæÑÉ ãä ÇáÇäßãÇÔ */
+        flex-shrink: 0;
     }
-
-    /* ---------------- ãÚáæãÇÊ ÇáÊæÇÕá (Contact Info) ---------------- */
 
     .cv-container .contact-info {
-        width: 50%;
+        flex: 1;
         display: flex;
-        flex-direction: column; /* ÊÍæíáåÇ Åáì ÚãæÏ ÈÏáÇğ ãä Õİ */
-        padding-left: 30px;
-        border-left: 1px solid var(--light-border);
-        gap: 5px;
-        font-size: 0.95rem;
+        flex-direction: column;
+        padding-left: 20px;
+        border-left: 2px solid var(--light-border);
+        gap: 8px;
+        font-size: 0.9rem;
+        min-width: 300px; /* ğŸ¯ Ù…Ø³Ø§Ø­Ø© ÙƒØ§ÙÙŠØ© Ù„Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ù„Ù…Ù†Ø¹ ØªØ¯Ø§Ø®Ù„Ù‡Ø§ Ù…Ø¹ Ø§Ù„ØµÙˆØ±Ø© */
     }
-
-        .cv-container .contact-info container {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-        }
 
     .cv-container .contact-item {
         display: flex;
-        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        line-height: 1.4;
+    }
+
+        .cv-container .contact-item strong {
+            min-width: 110px; /* ØªÙˆØ­ÙŠØ¯ Ø§Ù„Ø¹Ø±Ø¶ Ù„Ù„ÙƒÙ„Ù…Ø§Øª Ù…Ø«Ù„ Email: */
+            flex-shrink: 0;
+            color: var(--primary-color);
+        }
+
+        .cv-container .contact-item span,
+        .cv-container .contact-item a {
+            word-break: break-all; /* ğŸ¯ ÙƒØ³Ø± Ø§Ù„Ø±ÙˆØ§Ø¨Ø· Ø§Ù„Ø·ÙˆÙŠÙ„Ø© Ø¬Ø¯Ø§Ù‹ Ù„Ø¹Ø¯Ù… Ø¯ÙØ¹ Ø§Ù„Ø¹Ù†Ø§ØµØ± Ù„Ù„Ø®Ø§Ø±Ø¬ */
+            color: var(--secondary-color);
+            text-align: left;
+        }
+
+       @media (max-width: 768px) {
+    .cv-container .cv-header {
+        flex-direction: column; /* ØªØ­ÙˆÙŠÙ„ Ø§Ù„Ø¹Ù†Ø§ØµØ± Ù„ØªÙƒÙˆÙ† ÙÙˆÙ‚ Ø¨Ø¹Ø¶Ù‡Ø§ */
+        align-items: flex-start;
+    }
+
+    .cv-container .contact-info {
+        padding-left: 0;
+        border-left: none; /* Ø¥Ø²Ø§Ù„Ø© Ø§Ù„Ø®Ø· Ø§Ù„Ø¬Ø§Ù†Ø¨ÙŠ ÙÙŠ Ø§Ù„Ù…ÙˆØ¨Ø§ÙŠÙ„ */
+        width: 100%;
+        padding-top: 15px;
+        border-top: 1px dashed var(--light-border);
+    }
+
+    .cv-container .detail {
         width: 100%;
     }
+}
 
-    .cv-container strong {
-        font-weight: 600;
-        color: var(--primary-color);
-        min-width: 80px; /* áÊäÓíŞ ÃİÖá */
-    }
-
-    /* ---------------- ÃŞÓÇã ÌÓã ÇáÜ CV ---------------- */
+    /* ---------------- Ø£Ù‚Ø³Ø§Ù… Ø¬Ø³Ù… Ø§Ù„Ù€ CV ---------------- */
 
     .cv-container .cv-body {
         padding-top: 10px;
@@ -118,17 +128,17 @@
             font-weight: 600;
             letter-spacing: 0.5px;
             margin-bottom: 10px;
-            border-bottom: 2px solid var(--accent-bg); /* ÎØ ÊÍÊ ÇáÚäæÇä */
+            border-bottom: 2px solid var(--accent-bg); /* Ø®Ø· ØªØ­Øª Ø§Ù„Ø¹Ù†ÙˆØ§Ù† */
             display: inline-block;
             padding-bottom: 3px;
         }
 
     .cv-container p {
         margin-bottom: 8px;
-        white-space: pre-wrap; /* ááÍİÇÙ Úáì ÊäÓíŞ ÇáãÔÇÑíÚ æÇáãáÎÕ */
+        white-space: pre-wrap; /* Ù„Ù„Ø­ÙØ§Ø¸ Ø¹Ù„Ù‰ ØªÙ†Ø³ÙŠÙ‚ Ø§Ù„Ù…Ø´Ø§Ø±ÙŠØ¹ ÙˆØ§Ù„Ù…Ù„Ø®Øµ */
     }
 
-    /* ---------------- ÃÒÑÇÑ ÇáØÈÇÚÉ (Print Button) ---------------- */
+    /* ---------------- Ø£Ø²Ø±Ø§Ø± Ø§Ù„Ø·Ø¨Ø§Ø¹Ø© (Print Button) ---------------- */
 
     .cv-container .actions {
         text-align: center;
@@ -150,64 +160,105 @@
             background-color: #005f93;
         }
 
-/* ---------------- ÊäÓíŞÇÊ ÇáØÈÇÚÉ (Print Media) ---------------- */
-
-/* ---------------- íÌÈ æÖÚ åĞÇ İí ãáİ cv.css ---------------- */
+/* ---------------- Ø§Ù„ØªÙ†Ø³ÙŠÙ‚ Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠ ÙˆØ§Ù„Ù…Ø­Ø³Ù† Ù„Ù„Ø·Ø¨Ø§Ø¹Ø© ---------------- */
 @media print {
-    /* 1. ÅÎİÇÁ ÌãíÚ ÇáÚäÇÕÑ ÇáÊí íÌÈ Ãä ÊÎÊİí */
-
-    /* ÅÎİÇÁ ÔÑíØ ÇáÊäŞá (Navbar) */
-    .navbar {
-        display: none !important;
-    }
-
-    /* ÅÎİÇÁ ÇáÚäæÇä ÇáÊÑÍíÈí (Welcome, afnan salem) */
-    .container h1.display-6 {
-        display: none !important;
-    }
-
-    /* ÅÎİÇÁ ÚáÇãÇÊ ÇáÊÈæíÈ (CV & Posts Tabs) */
-    .nav-tabs {
-        display: none !important;
-    }
-
-    /* ÅÎİÇÁ ÒÑ "Edit CV Data" æÒÑ "Download/Print" */
+    /* 1. Ø¥Ø®ÙØ§Ø¡ ÙƒÙ„ Ù…Ø§ Ù‡Ùˆ Ù„ÙŠØ³ Ø¬Ø²Ø¡Ø§Ù‹ Ù…Ù† Ø§Ù„Ø³ÙŠØ±Ø© Ø§Ù„Ø°Ø§ØªÙŠØ© */
+    nav.navbar,
+    .nav-tabs,
     .actions,
-    .text-end.mb-3 {
+    #editCvBtn,
+    #printBtn,
+    .display-6,
+    .dropdown,
+    footer,
+    .btn {
         display: none !important;
     }
 
+    /* 2. Ø¶Ø¨Ø· Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„ØµÙØ­Ø© ÙˆØ§Ù„Ù‡ÙˆØ§Ù…Ø´ */
+    @page {
+        size: A4;
+        margin: 1cm; /* Ù‡ÙˆØ§Ù…Ø´ Ù…ØªØ²Ù†Ø© Ù„Ù„Ø·Ø¨Ø§Ø¹Ø© */
+    }
 
     body {
-        padding: 10px !important;
         margin: 0 !important;
+        padding: 0 !important;
         background-color: white !important;
-    }
-    .contact-item{
-        justify-content: flex-start !important;
-        gap: 10px !important;
-    }
-   
-    .cv-container {
-        /* ÅÒÇáÉ ÇáÙáÇá æÇáÍÏæÏ æÇáåæÇãÔ ÇáÎÇÑÌíÉ */
-        box-shadow: none !important;
-        border: none !important;
-        margin: 0 auto !important;
-        padding: 20px !important; /* Ãæ íãßäß ÊÑß padding: 20px ÅĞÇ ßäÊ ÊİÖá åÇãÔ */
-        max-width: 100% !important;
-        width: 100% !important;
+        -webkit-print-color-adjust: exact !important; /* Ù„Ø¶Ù…Ø§Ù† Ø·Ø¨Ø§Ø¹Ø© Ø§Ù„Ø£Ù„ÙˆØ§Ù† ÙˆØ§Ù„Ø®Ù„ÙÙŠØ§Øª */
+        print-color-adjust: exact !important;
     }
 
-    /* 3. ÖãÇä Ãä ÇáÊÇÈ ÇáäÔØ íÙåÑ ÈÏæä ÍÏæÏ ÇáÍÇæíÉ */
+    /* 3. ØªÙ…Ø¯ÙŠØ¯ Ø§Ù„Ø­Ø§ÙˆÙŠØ© Ù„ØªÙ…Ù„Ø£ Ø§Ù„ÙˆØ±Ù‚Ø© Ø¨Ø§Ù„ÙƒØ§Ù…Ù„ */
+    .cv-container {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Ø¥Ø²Ø§Ù„Ø© Ø­Ø¯ÙˆØ¯ Ø§Ù„Ø­Ø§ÙˆÙŠØ© Ø§Ù„Ø®Ø§Ø±Ø¬ÙŠØ© ÙÙŠ Ø§Ù„ØªØ§Ø¨ */
     #myDashboardTabContent {
         border: none !important;
         padding: 0 !important;
         box-shadow: none !important;
+        background: transparent !important;
     }
 
-    .container.my-5 {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        padding: 0 !important;
+    /* 4. ØªØ­Ø³ÙŠÙ† Ø§Ù„Ù‡ÙŠØ¯Ø± (Ø§Ù„ØµÙˆØ±Ø© ÙˆØ§Ù„Ø¨ÙŠØ§Ù†Ø§Øª) */
+    .cv-container .cv-header {
+        border-bottom: 3px solid #0077B6 !important; /* Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ø£Ø³Ø§Ø³ÙŠ */
+        margin-bottom: 25px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+    }
+
+    .cv-container .profile-img-container img {
+        width: 120px !important;
+        height: 120px !important;
+        margin-right: 30px !important;
+        border: 3px solid #0077B6 !important;
+    }
+
+    /* 5. Ø¶Ø¨Ø· Ø§Ù„Ù†ØµÙˆØµ Ù„ØªÙƒÙˆÙ† ÙˆØ§Ø¶Ø­Ø© Ø¬Ø¯Ø§Ù‹ Ø¨Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ø£Ø³ÙˆØ¯ */
+    h1, h3, h5, strong {
+        color: #000 !important;
+    }
+
+    .text-primary, .text-secondary {
+        color: #000 !important;
+    }
+
+    /* 6. Ø¶Ù…Ø§Ù† Ø¸Ù‡ÙˆØ± Ø£Ø´Ø±Ø·Ø© Ø§Ù„ØªÙ‚Ø¯Ù… (Skills Progress Bars) */
+    .progress {
+        height: 10px !important;
+        background-color: #e9ecef !important;
+        border: 1px solid #ccc !important;
+        border-radius: 5px !important;
+        overflow: hidden !important;
+        display: block !important;
+    }
+
+    .progress-bar {
+        background-color: #0077B6 !important; /* Ù„ÙˆÙ† Ø§Ù„Ù…Ù‡Ø§Ø±Ø§Øª */
+        height: 100% !important;
+        display: block !important;
+    }
+
+    /* 7. Ù…Ù†Ø¹ Ù‚Ø·Ø¹ Ø§Ù„Ø£Ù‚Ø³Ø§Ù… Ø¨ÙŠÙ† ÙˆØ±Ù‚ØªÙŠÙ† (Page Break) */
+    .cv-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin-bottom: 20px !important;
+        border-bottom: 1px solid #eee !important;
+    }
+
+    /* 8. ØªØ¸Ø¨ÙŠØ· Ø§Ù„Ø±ÙˆØ§Ø¨Ø· (LinkedIn) */
+    a {
+        text-decoration: none !important;
+        color: black !important;
     }
 }

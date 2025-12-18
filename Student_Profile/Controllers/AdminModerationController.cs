@@ -65,6 +65,19 @@ namespace Student_Profile.Controllers
             return RedirectToAction("Index");
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteInappropriatePost(int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            if (post != null)
+            {
+                _context.Posts.Remove(post);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
+        }
+
         // Solve Complaint Action
         [HttpPost]
         public IActionResult SolveComplaint(int id)

@@ -92,6 +92,11 @@
                     <i class="bi bi-send-check me-1"></i> My Posts
                 </button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="complaints-tab" data-bs-toggle="tab" data-bs-target="#complaints" type="button" role="tab">
+                    <i class="bi bi-chat-square-dots me-1"></i> My Complaints
+                </button>
+            </li>
         </ul>
 
         <div class="tab-content p-4 border border-top-0 bg-white shadow-sm" id="myDashboardTabContent">
@@ -120,6 +125,72 @@
                     <i class="bi bi-send-check me-1"></i> Go to My Posts Management
                 </a>
             </div>
+            <div class="tab-pane fade" id="complaints" role="tabpanel" tabindex="0">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-secondary">My Submitted Complaints</h4>
+                    @* يمكنك توجيه هذا الزر لصفحة إنشاء شكوى جديدة *@
+                    <a href="@Url.Action("Create", "Complaint")" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i> File New Complaint
+                    </a>
+                </div>
+
+                @if (ViewBag.UserComplaints != null && ((List<Student_Profile.Models.Complaint>)ViewBag.UserComplaints).Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover border">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Submitted On</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var complaint in (List<Student_Profile.Models.Complaint>)ViewBag.UserComplaints)
+                                {
+                                    <tr>
+                                        <td><strong>@complaint.Subject</strong></td>
+                                        <td><span class="badge bg-secondary">@complaint.Type</span></td>
+                                        <td>
+                                            @if (complaint.Status == "Pending")
+                                            {
+                                                <span class="badge bg-warning text-dark">Under Review</span>
+                                            }
+                                            else if (complaint.Status == "Solved" || complaint.Status == "Resolved")
+                                            {
+                                                <span class="badge bg-success">Resolved</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-info">@complaint.Status</span>
+                                            }
+                                        </td>
+                                        <td>@complaint.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                    </tr>
+                                    @if (!string.IsNullOrEmpty(complaint.AdminComment))
+                                    {
+                                        <tr class="table-info">
+                                            <td colspan="4">
+                                                <small><strong>Admin Feedback:</strong> @complaint.AdminComment</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="bi bi-chat-left-text display-4 text-muted"></i>
+                        <p class="mt-2 text-muted">You haven't submitted any complaints yet.</p>
+                    </div>
+                }
+            </div>
+
+           
         </div>
     </div>
 
@@ -131,7 +202,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const printButton = document.getElementById('printBtn');
-            const cvContent = document.getElementById('cvContent'); // الحاوية الرئيسية للـ CV
+            const cvContent = document.getElementById('cvContent');
 
             if (printButton && cvContent) {
                 printButton.addEventListener('click', function () {

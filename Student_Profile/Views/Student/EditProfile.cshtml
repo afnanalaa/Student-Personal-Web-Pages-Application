@@ -1,70 +1,124 @@
-﻿@* @model Student_Profile.ViewModels.StudentProfileViewModel
+﻿@model Student_Profile.ViewModels.StudentProfileViewModel
 
 @{
-    ViewData["Title"] = "Edit Profile";
+    ViewData["Title"] = "Edit My CV Data";
 }
 
-<h2>Edit Profile</h2>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-secondary text-white p-4">
+                    <h2 class="mb-0"><i class="bi bi-pencil-square me-2"></i> Edit Professional Profile</h2>
+                    <p class="mb-0 opacity-75">Update your professional information and contact details</p>
+                </div>
 
-<!-- ✅ الفورم الأساسي -->
-<form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="EditProfile" asp-controller="Student" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
 
-    <div class="form-group">
-        <label>Profile Image:</label><br />
-        <img src="~/uploads/student-profiles/@Model.ExistingProfileImage" width="150" />
+                        <div class="row">
+                            <div class="col-md-4 border-end">
+                                <div class="text-center mb-4">
+                                    <label class="form-label d-block fw-bold text-muted">Profile Picture</label>
+                                    <div class="position-relative d-inline-block">
+                                        <img src="~/uploads/student-profiles/@(Model.ExistingProfileImage ?? "default-avatar.png")"
+                                             class="rounded-circle img-thumbnail shadow-sm mb-3"
+                                             style="width: 150px; height: 150px; object-fit: cover;"
+                                             id="previewImage" alt="Profile Image">
+
+                                        <div class="mb-3">
+                                            <input asp-for="ProfileImage" class="form-control form-control-sm" type="file"
+                                                   accept="image/*" onchange="previewFile()">
+                                            <small class="text-muted d-block mt-1">Accepted: JPG, PNG (Max 2MB)</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Department" class="form-label fw-bold text-muted">Academic Department</label>
+                                    <input asp-for="Department" class="form-control border-primary-subtle" placeholder="e.g. Computer and Control" />
+                                    <span asp-validation-for="Department" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Address" class="form-label fw-bold text-muted">City / Location</label>
+                                    <input asp-for="Address" class="form-control border-primary-subtle" placeholder="e.g. Port Said, Egypt" />
+                                    <span asp-validation-for="Address" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label asp-for="ContactInformation" class="form-label fw-bold text-muted">LinkedIn / Portfolio URL</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-link-45deg"></i></span>
+                                        <input asp-for="ContactInformation" class="form-control border-primary-subtle" placeholder="https://linkedin.com/in/username" />
+                                    </div>
+                                    <span asp-validation-for="ContactInformation" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-8 ps-md-4">
+                                <div class="mb-4">
+                                    <label asp-for="Bio" class="form-label fw-bold text-muted">Professional Summary (Bio)</label>
+                                    <textarea asp-for="Bio" class="form-control border-primary-subtle" rows="3"
+                                              placeholder="Briefly describe your professional background and goals..."></textarea>
+                                    <span asp-validation-for="Bio" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label asp-for="Skills" class="form-label fw-bold text-muted">Skills (Comma separated)</label>
+                                    <input asp-for="Skills" class="form-control border-primary-subtle"
+                                           placeholder="e.g. ASP.NET Core, SQL Server, C#, JavaScript, Figma" />
+                                    <span asp-validation-for="Skills" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label asp-for="Projects" class="form-label fw-bold text-muted">Key Projects</label>
+                                    <textarea asp-for="Projects" class="form-control border-primary-subtle" rows="5"
+                                              placeholder="List your projects (each on a new line)..."></textarea>
+                                    <span asp-validation-for="Projects" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label asp-for="Interests" class="form-label fw-bold text-muted">Professional Interests</label>
+                                    <input asp-for="Interests" class="form-control border-primary-subtle"
+                                           placeholder="e.g. Web Development, AI, DevOps, Cyber Security" />
+                                    <span asp-validation-for="Interests" class="text-danger small"></span>
+                                </div>
+
+                                <div class="d-flex gap-2 justify-content-end mt-5 border-top pt-4">
+                                    <a asp-action="StudentDashboard" class="btn btn-outline-secondary px-4">
+                                        <i class="bi bi-x-circle me-1"></i> Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-primary px-5 shadow-sm">
+                                        <i class="bi bi-check2-circle me-1"></i> Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group mt-2">
-        <label asp-for="ProfileImage">Upload New Image</label>
-        <input asp-for="ProfileImage" type="file" class="form-control" />
-        <span asp-validation-for="ProfileImage" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mt-3">
-        <label asp-for="Bio"></label>
-        <textarea asp-for="Bio" class="form-control"></textarea>
-        <span asp-validation-for="Bio" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mt-3">
-        <label asp-for="Interests"></label>
-        <input asp-for="Interests" class="form-control" />
-        <span asp-validation-for="Interests" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mt-3">
-        <label asp-for="Skills"></label>
-        <input asp-for="Skills" class="form-control" />
-        <span asp-validation-for="Skills" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mt-3">
-        <label asp-for="GitHub"></label>
-        <input asp-for="GitHub" class="form-control" />
-        <span asp-validation-for="GitHub" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mt-3">
-        <label asp-for="LinkedIn"></label>
-        <input asp-for="LinkedIn" class="form-control" />
-        <span asp-validation-for="LinkedIn" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mt-3">
-        <label asp-for="EmailContact"></label>
-        <input asp-for="EmailContact" class="form-control" />
-        <span asp-validation-for="EmailContact" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
-</form>
-
-<!-- ✅ فورم منفصل لحذف الصورة -->
-<form asp-action="RemoveProfileImage" method="post" class="mt-2">
-    @Html.AntiForgeryToken()
-    <button type="submit" class="btn btn-danger">Remove Profile Image</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-} *@
+    <script>
+        // دالة لمعاينة الصورة فور اختيارها من الجهاز
+        function previewFile() {
+            const preview = document.querySelector('#previewImage');
+            const file = document.querySelector('input[type=file]').files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                preview.src = reader.result;
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+}

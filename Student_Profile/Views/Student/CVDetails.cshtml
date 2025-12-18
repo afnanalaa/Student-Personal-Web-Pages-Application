@@ -19,25 +19,20 @@
         <div class="contact-info">
             <container>
                 <div class="contact-item">
-                    @* عرض الرقم القومي من نموذج المستخدم *@
                     <strong>National ID:</strong> <span id="displayId">@Model.User.NationalId</span>
                 </div>
                 <div class="contact-item">
-                    @* عرض البريد الإلكتروني من نموذج المستخدم *@
                     <strong>Email:</strong> <span id="displayEmail">@Model.User.Email</span>
                 </div>
                 <div class="contact-item">
-                    @* عرض رابط التواصل (LinkedIn/GitHub) *@
                     <strong>ContactInformation:</strong> <a id="displayLinkedIn" href="@Model.ContactInformation" target="_blank">@Model.ContactInformation</a>
                 </div>
             </container>
             <container>
                 <div class="contact-item">
-                    @* عرض رقم الهاتف من نموذج المستخدم *@
                     <strong>Phone:</strong> <span id="displayPhone">@Model.User.PhoneNumber</span>
                 </div>
                 <div class="contact-item">
-                    @* عرض العنوان من نموذج الملف الشخصي *@
                     <strong>Address:</strong> <span id="displayAddress">@Model.Address</span>
                 </div>
             </container>
@@ -53,7 +48,6 @@
 
         <section class="cv-section">
             <h3>Projects</h3>
-            @* تقسيم النص إلى فقرات أو نقاط إذا كان مخزناً كنص طويل *@
             <p id="displayProjects">@Html.Raw(Model.Projects.Replace("\n", "<br/>"))</p>
         </section>
 
@@ -61,6 +55,77 @@
             <h3>Skills</h3>
             <p id="displaySkills">@Model.Skills</p>
         </section>
+        @* داخل ملف CVDetails.cshtml استبدل قسم Technical Skills بهذا الكود *@
+
+        @* <section class="cv-section">
+            <h3 class="mb-4 text-primary border-bottom pb-2">Technical Skills</h3>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-secondary"><i class="bi bi-code-slash me-2"></i>Languages</h5>
+                    <hr class="mt-1 mb-3">
+                    @{
+                        // تقسيم حقل المهارات النصي أو استخدام عينات توضيحية
+                        var languages = new List<string> { "C#", "SQL", "JavaScript" };
+                                        foreach (var lang in languages) 
+                                        {
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="fw-semibold">@lang</span> 
+                                    <span class="text-muted small">85%</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div> 
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-secondary"><i class="bi bi-stack me-2"></i>Frameworks</h5>
+                    <hr class="mt-1 mb-3">
+                    @{
+                        var frameworks = new List<string> { "ASP.NET Core", "Entity Framework", "Bootstrap" };
+                                        foreach (var fw in frameworks) 
+                                        {
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="fw-semibold">@fw</span>
+                                    <span class="text-muted small">75%</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div> 
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-secondary"><i class="bi bi-tools me-2"></i>Tools</h5>
+                    <hr class="mt-1 mb-3">
+                    @{
+                        var tools = new List<string> { "Git & GitHub", "Visual Studio", "SQL Server" };
+                                        foreach (var tool in tools)
+                                        {
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="fw-semibold">@tool</span>
+                                    <span class="text-muted small">90%</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div> [cite: 144]
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </section> *@
 
         <section class="cv-section">
             <h3>Interests</h3>

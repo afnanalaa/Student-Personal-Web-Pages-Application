@@ -42,36 +42,55 @@
         {
             <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
         }
-
-        <h1 class="fw-bold mb-4 text-primary">Pending Account Verification (@Model.Count)</h1>
-
-        @if (!Model.Any())
-        {
-            <div class="alert alert-success" role="alert">
-                <i class="bi bi-check-circle me-2"></i> No pending student accounts at the moment.
-            </div>
-        }
         else
         {
         <table class="table table-striped table-bordered shadow-sm">
             <thead class="bg-success text-white">
-                <tr>
-                    <th>#</th>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.Count; i++)
-                {
-                    var student = Model[i];
                     <tr>
-                        <td>@(i + 1)</td>
-                        <td>@student.FullName</td>
-                        <td>@student.Email</td>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Status</th> 
+                        <th>Actions</th> 
                     </tr>
-                }
-            </tbody>
+            </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var student = Model[i];
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@student.FullName</td>
+                            <td>@student.Email</td>
+                            <td>
+                                <span class="badge @(student.AccountStatus == "Graduated" ? "bg-info" : "bg-success")">
+                                    @student.AccountStatus
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    @if (student.AccountStatus != "Graduated")
+                                    {
+                                        <form asp-action="MarkAsGraduated" asp-controller="Admin" method="post">
+                                            <input type="hidden" name="userId" value="@student.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-mortarboard-fill"></i> Graduate
+                                            </button>
+                                        </form>
+                                    }
+
+                                    <form asp-action="DeleteStudent" asp-controller="Admin" method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this student?');">
+                                        <input type="hidden" name="userId" value="@student.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash-fill"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
         </table>
     }
 </div>

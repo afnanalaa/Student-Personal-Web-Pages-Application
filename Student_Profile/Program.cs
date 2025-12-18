@@ -30,6 +30,9 @@ namespace Student_Profile
 
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+            // ÊÓÌíá ÎÏãÉ İáÊÑÉ ÇáãÍÊæì
+            builder.Services.AddScoped<ContentFilterService>();
+
             builder.Services.AddScoped<IDBInitializer, DBInitializer>();
             var app = builder.Build();
 
