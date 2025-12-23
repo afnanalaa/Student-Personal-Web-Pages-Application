@@ -413,8 +413,9 @@ namespace Student_Profile.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+            ViewData["Layout"] = "~/Views/Shared/_Layout.cshtml";
 
-            return View(profile);
+            return View("CVDetails", profile);
         }
 
 

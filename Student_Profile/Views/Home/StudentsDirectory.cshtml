@@ -29,8 +29,16 @@
                     <h5 class="fw-bold">@student.User.FullName</h5>
                     <p class="text-info small mb-2">@student.Department</p>
                     <p class="small text-muted text-truncate" style="max-width: 100%;">@student.Bio</p>
-                    <a href="@Url.Action("Details", "Student", new { slug = student.ProfileSlug })"
-                       class="btn btn-outline-primary btn-sm mt-auto">View Profile</a>
+                    @* <a href="@Url.Action("Details", "Student", new { slug = student.ProfileSlug })"
+                       class="btn btn-outline-primary btn-sm mt-auto">View Profile</a> *@
+                    <div class="card-footer bg-transparent border-0 pb-4">
+                        <a asp-controller="Student"
+                           asp-action="Details"
+                           asp-route-slug="@student.ProfileSlug"
+                           class="btn btn-outline-primary btn-sm w-100 rounded-pill">
+                            View Profile
+                        </a>
+                    </div>
                 </div>
             </div>
         }

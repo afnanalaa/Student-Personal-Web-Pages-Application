@@ -55,18 +55,50 @@ namespace Student_Profile.Controllers
             // حفظ صورة البطاقة / الكارنيه
             if (model.StudentCardOrNationalImage != null)
             {
+                // ============================================================
+                // 🔒 SECURITY CHECK START: التحقق من نوع الملف وحجمه
+                // ============================================================
+
+                // 1. تحديد الامتدادات المسموحة
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".pdf" };
+                var extension = Path.GetExtension(model.StudentCardOrNationalImage.FileName).ToLower();
+
+                // 2. فحص الامتداد
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("StudentCardOrNationalImage", "Invalid file type. Only images (JPG, PNG) and PDF files are allowed.");
+                    return View(model);
+                }
+
+                // 3. فحص الحجم (5 ميجا كحد أقصى)
+                if (model.StudentCardOrNationalImage.Length > 5 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("StudentCardOrNationalImage", "File size is too large. The maximum allowed size is 5MB.");
+                    return View(model);
+                }
+                // ============================================================
+                // 🔒 SECURITY CHECK END
+                // ============================================================
+
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
 
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
 
-                fileName = Guid.NewGuid() + Path.GetExtension(model.StudentCardOrNationalImage.FileName);
+                // استخدام الامتداد الذي تم فحصه لضمان الأمان
+                fileName = Guid.NewGuid() + extension;
                 string filePath = Path.Combine(uploadsFolder, fileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     await model.StudentCardOrNationalImage.CopyToAsync(fileStream);
                 }
+            }
+
+            else
+            {
+                ModelState.AddModelError("StudentCardOrNationalImage", "Identity document is required.");
+                return View(model);
             }
 
             // إنشاء الطالب
@@ -77,12 +109,11 @@ namespace Student_Profile.Controllers
                 FullName = model.FullName,
                 NationalId = model.NationalId,
                 PhoneNumber = model.PhoneNumber,
-                StudentCardImageORNationalUrl = "/images/" + fileName,
+                StudentCardImageORNationalUrl = fileName != null ? "/images/" + fileName : null, // تأكدنا من حفظ المسار الصحيح
 
-                // لو عندك نظام Approval
-                // EmailConfirmed = false,
-                // IsApproved = false
-                EmailConfirmed = true
+                // الحساب يحتاج موافقة الأدمن، لذا نتركه مفعلاً كإيميل ولكن الحالة Pending
+                EmailConfirmed = true,
+                AccountStatus = "Pending" // تأكد أن لديك هذا الحقل في قاعدة البيانات، أو اعتمد على المنطق الافتراضي
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -91,7 +122,7 @@ namespace Student_Profile.Controllers
             {
                 await _userManager.AddToRoleAsync(user, SD.Student);
 
-                // لا تسجّل الدخول مباشرة
+                // توجيه لصفحة الانتظار
                 return RedirectToAction("PendingApproval", "Home");
             }
 
@@ -100,6 +131,63 @@ namespace Student_Profile.Controllers
 
             return View(model);
         }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> RegisterStudent(StudentRegisterViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View(model);
+
+        //    string fileName = null;
+
+        //    // حفظ صورة البطاقة / الكارنيه
+        //    if (model.StudentCardOrNationalImage != null)
+        //    {
+        //        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+        //        if (!Directory.Exists(uploadsFolder))
+        //            Directory.CreateDirectory(uploadsFolder);
+
+        //        fileName = Guid.NewGuid() + Path.GetExtension(model.StudentCardOrNationalImage.FileName);
+        //        string filePath = Path.Combine(uploadsFolder, fileName);
+
+        //        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await model.StudentCardOrNationalImage.CopyToAsync(fileStream);
+        //        }
+        //    }
+
+        //    // إنشاء الطالب
+        //    var user = new ApplicationUser
+        //    {
+        //        UserName = model.Email,
+        //        Email = model.Email,
+        //        FullName = model.FullName,
+        //        NationalId = model.NationalId,
+        //        PhoneNumber = model.PhoneNumber,
+        //        StudentCardImageORNationalUrl = "/images/" + fileName,
+
+        //        // لو عندك نظام Approval
+        //        // EmailConfirmed = false,
+        //        // IsApproved = false
+        //        EmailConfirmed = true
+        //    };
+
+        //    var result = await _userManager.CreateAsync(user, model.Password);
+
+        //    if (result.Succeeded)
+        //    {
+        //        await _userManager.AddToRoleAsync(user, SD.Student);
+
+        //        // لا تسجّل الدخول مباشرة
+        //        return RedirectToAction("PendingApproval", "Home");
+        //    }
+
+        //    foreach (var error in result.Errors)
+        //        ModelState.AddModelError("", error.Description);
+
+        //    return View(model);
+        //}
 
         // ----------------- LOGIN (GET) -----------------
         [HttpGet]

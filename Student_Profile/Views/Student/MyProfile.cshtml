@@ -54,7 +54,7 @@
                     @using (Html.BeginForm("CreatePost", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken()
-                        <textarea class="form-control mb-3" name="Content" rows="3" placeholder="Share a project update or an achievement..." required></textarea>
+                        <textarea class="form-control mb-3" name="Content" rows="3" placeholder="Share a project update or an achievement..."></textarea>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="file" class="form-control w-auto" name="ImageFile" accept="image/*,.pdf">
                             <button type="submit" class="btn btn-success">Submit for Review</button>

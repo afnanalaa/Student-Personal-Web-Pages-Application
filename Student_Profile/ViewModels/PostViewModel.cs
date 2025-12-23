@@ -7,10 +7,10 @@ namespace Student_Profile.ViewModels
     {
         [StringLength(500, ErrorMessage = "Post cannot exceed 500 characters.")]
         [Display(Name = "Post Content")]
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         [Display(Name = "Image/File")]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
     }
 
 }

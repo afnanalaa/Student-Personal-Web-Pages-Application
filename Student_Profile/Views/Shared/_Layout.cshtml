@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Student_Profile.styles.css" asp-append-version="true" />
 
+    @await RenderSectionAsync("Styles", required: false)
+
     <style>
         html, body {
             height: 100%;

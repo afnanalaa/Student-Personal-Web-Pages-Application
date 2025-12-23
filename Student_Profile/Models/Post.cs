@@ -14,8 +14,7 @@ namespace Student_Profile.Models
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-        [Required]
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         public string? ImageFile { get; set; }
 
