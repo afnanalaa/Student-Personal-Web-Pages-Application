@@ -33,5 +33,7 @@ namespace Student_Profile.Models
         // 🔹 رابط URL فريد
         [Required]
         public string ProfileSlug { get; set; }
+
+        public string PrivacyMode { get; set; } = "Public"; 
     }
 }

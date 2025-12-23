@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Student_Profile.Models.StudentProfile>
+@{
+    ViewData["Title"] = "Students Directory";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary">University Students Directory</h1>
+        <p class="text-muted">Browse profiles of approved engineering students </p>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-6">
+            <form method="get" asp-action="StudentsDirectory" class="d-flex shadow-sm">
+                <input type="text" name="search" class="form-control" placeholder="Search by name or department...">
+                <button type="submit" class="btn btn-primary ms-2 px-4">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var student in Model)
+        {
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 text-center p-3">
+                    <img src="~/uploads/student-profiles/@(student.ProfileImageUrl ?? "default-avatar.png")"
+                         class="rounded-circle mx-auto mb-3"
+                         style="width: 100px; height: 100px; object-fit: cover;">
+                    <h5 class="fw-bold">@student.User.FullName</h5>
+                    <p class="text-info small mb-2">@student.Department</p>
+                    <p class="small text-muted text-truncate" style="max-width: 100%;">@student.Bio</p>
+                    <a href="@Url.Action("Details", "Student", new { slug = student.ProfileSlug })"
+                       class="btn btn-outline-primary btn-sm mt-auto">View Profile</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

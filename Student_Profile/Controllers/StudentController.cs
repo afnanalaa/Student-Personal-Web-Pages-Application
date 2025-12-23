@@ -28,26 +28,30 @@ namespace Student_Profile.Controllers
             _filterService = filterService;
         }
 
-        //[AllowAnonymous]
-        //[Route("Student/Directory")] 
-        //public async Task<IActionResult> Index(string search)
-        //{
-        //    var query = _context.StudentProfiles
-        //        .Include(p => p.User)
-        //        .Where(p => p.User.AccountStatus == "Approved")
-        //        .AsQueryable();
 
-        //    if (!string.IsNullOrEmpty(search))
-        //    {
-        //        query = query.Where(p => p.User.FullName.Contains(search) ||
-        //                                 p.Skills.Contains(search) ||
-        //                                 p.Department.Contains(search));
-        //    }
+        [HttpGet]
+        public async Task<IActionResult> SetPrivacy(string mode)
+        {
+            var allowedModes = new[] { "Public", "University", "Private" };
+            if (!allowedModes.Contains(mode))
+            {
+                return BadRequest("Invalid privacy mode.");
+            }
 
-        //    var students = await query.ToListAsync();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var profile = await _context.StudentProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
 
-        //    return View(students);
-        //}
+            if (profile == null) return NotFound();
+
+            // تحديث حالة الخصوصية
+            profile.PrivacyMode = mode;
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = $"Your profile is now {mode}.";
+            return RedirectToAction("StudentDashboard"); 
+}
+
+
 
         // GET: Create Profile
         [HttpGet]
@@ -388,27 +392,32 @@ namespace Student_Profile.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Details(string slug)
         {
-            
-            if (string.IsNullOrEmpty(slug))
-                return NotFound();
-
             var profile = _context.StudentProfiles
-                .Include(p => p.User) 
+                .Include(p => p.User)
                 .FirstOrDefault(p => p.ProfileSlug == slug);
 
-            if (profile == null)
-                return NotFound();
+            if (profile == null) return NotFound();
+
+            // منع الوصول إذا كان البروفايل Private والأدمن ليس هو المستعرض
+            if (profile.PrivacyMode == "Private" && !User.IsInRole("Admin"))
+            {
+                return Forbid(); // أو توجيهه لصفحة تخبره بأن الملف خاص
+            }
+
+            // منع الوصول للزوار إذا كان الملف لطلاب الجامعة فقط
+            if (profile.PrivacyMode == "University" && !User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
             return View(profile);
         }
 
 
-
-
-       
 
     }
 }
