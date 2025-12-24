@@ -16,11 +16,6 @@ namespace Student_Profile.Controllers
         }
         public async Task<IActionResult> Index() 
         {
-            //var reportedPosts = await _context.Posts
-            //    .Include(p => p.User)
-            //    .Where(p => p.IsReported == true )
-            //    .ToListAsync(); 
-
             var vm = new ModerationViewModel
             {
                
@@ -39,8 +34,7 @@ namespace Student_Profile.Controllers
 
             return View("~/Views/Admin/Moderation.cshtml", vm);
         }
-        // Approve / Reject Post Actions
-        // ========================
+
         [HttpPost]
         public IActionResult ApprovePost(int id)
         {
@@ -48,9 +42,10 @@ namespace Student_Profile.Controllers
             if (post == null) return NotFound();
 
             post.Status = "Approved";
+            post.IsReported = false; 
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "AdminModeration");
         }
 
         [HttpPost]
@@ -60,9 +55,10 @@ namespace Student_Profile.Controllers
             if (post == null) return NotFound();
 
             post.Status = "Rejected";
+            post.IsReported = false;
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "AdminModeration");
         }
 
 
@@ -75,10 +71,9 @@ namespace Student_Profile.Controllers
                 _context.Posts.Remove(post);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "AdminModeration");
         }
 
-        // Solve Complaint Action
         [HttpPost]
         public IActionResult SolveComplaint(int id)
         {

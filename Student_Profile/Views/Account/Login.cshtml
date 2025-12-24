@@ -16,22 +16,19 @@
 
                 @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "loginForm" }))
                 {
-                    @Html.AntiForgeryToken() @* للأمان *@
+                    @Html.AntiForgeryToken() 
 
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     
-                    @* 2. University Email *@
                     <div class="mb-3">
                         <label asp-for="Email" class="form-label">University Email Address</label>
                         <input asp-for="Email" type="email" class="form-control" placeholder="s123456@eng.psu.edu.eg" required>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
-                    @* 3. Password with Toggle Icon *@
                     <div class="mb-3">
                         <label asp-for="Password" class="form-label"></label>
                         <div class="input-group">
-                            @* تحديد ID يدوياً لضمان عمل JavaScript *@
                             <input asp-for="Password" type="password" class="form-control" id="password" required>
 
                             <button class="btn btn-outline-secondary" type="button" id="togglePassword">

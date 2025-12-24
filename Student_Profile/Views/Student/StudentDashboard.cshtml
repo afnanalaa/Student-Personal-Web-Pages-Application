@@ -27,7 +27,9 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid container">
 
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")">Port Said University</a>
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="@Url.Action("Index", "Home")">
+                <span class="text-white">Port Said</span><span class="text-info ms-1">University</span>
+            </a>
 
             <div class="d-flex align-items-center">
                 <div class="collapse navbar-collapse" id="navbarNav">
@@ -40,31 +42,27 @@
                     </ul>
                 </div>
 
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Settings">
-                        <i class="bi bi-gear-fill"></i>
-                    </button>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Settings">
+                            <i class="bi bi-gear-fill"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li class="dropdown-header fw-bold text-dark">Profile Visibility</li>
+                            <li><a class="dropdown-item" href="@Url.Action("SetPrivacy", "Student", new { mode = "Public" })"><i class="bi bi-globe me-2"></i> Public</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("SetPrivacy", "Student", new { mode = "University" })"><i class="bi bi-person-badge me-2"></i> University Only</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("SetPrivacy", "Student", new { mode = "Private" })"><i class="bi bi-lock-fill me-2"></i> Private</a></li>
+                        </ul>
+                    </div>
 
-                    <ul class="dropdown-menu dropdown-menu-end">
-
-                        <li class="dropdown-header fw-bold">Profile Visibility</li>
-
-                        <li><a class="dropdown-item" href="@Url.Action("SetPrivacy", "Student", new { mode = "Public" })"><i class="bi bi-globe me-2"></i> Public</a></li>
-                        <li><a class="dropdown-item" href="@Url.Action("SetPrivacy", "Student", new { mode = "University" })"><i class="bi bi-person-badge me-2"></i> University Students Only</a></li>
-                        <li><a class="dropdown-item" href="@Url.Action("SetPrivacy", "Student", new { mode = "Private" })"><i class="bi bi-lock-fill me-2"></i> Private (Admin Only)</a></li>
-
-                        <li><hr class="dropdown-divider"></li>
-
-                        @using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { @style = "display:inline;" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            <li>
-                                <button type="submit" class="dropdown-item text-danger">
-                                    <i class="bi bi-box-arrow-right me-2"></i> Log Out
-                                </button>
-                            </li>
-                        }
-                    </ul>
+                    @using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { @class = "m-0" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger d-flex align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span class="d-none d-md-inline">Log Out</span>
+                        </button>
+                    }
                 </div>
 
             </div>
@@ -128,7 +126,6 @@
             <div class="tab-pane fade" id="complaints" role="tabpanel" tabindex="0">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="text-secondary">My Submitted Complaints</h4>
-                    @* يمكنك توجيه هذا الزر لصفحة إنشاء شكوى جديدة *@
                     <a href="@Url.Action("Create", "Complaint")" class="btn btn-outline-primary btn-sm">
                         <i class="bi bi-plus-circle me-1"></i> File New Complaint
                     </a>

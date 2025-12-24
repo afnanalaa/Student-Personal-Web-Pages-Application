@@ -11,9 +11,6 @@ namespace Student_Profile.Models
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
-
-        // 🔹 بيانات اختيارية
-
         public string? Bio { get; set; }
         public string? Interests { get; set; }
         public string? Skills { get; set; }
@@ -24,13 +21,10 @@ namespace Student_Profile.Models
         [MaxLength(500)]
         public string? Projects { get; set; }
 
-        // 🔹 روابط
         public string? ContactInformation { get; set; }
 
-        // 🔹 صورة البروفايل (اختيارية)
         public string? ProfileImageUrl { get; set; }
 
-        // 🔹 رابط URL فريد
         [Required]
         public string ProfileSlug { get; set; }
 

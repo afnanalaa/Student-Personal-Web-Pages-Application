@@ -14,10 +14,8 @@ namespace Student_Profile.Models
         [Required]
         public string? StudentCardImageORNationalUrl { get; set; }
 
-        // 🔥 admin approval status
         public string AccountStatus { get; set; } = "Pending";
 
-        // Pending | Approved | Rejected | graduated | Deleted
 
         public StudentProfile StudentProfile { get; set; }
     }

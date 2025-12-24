@@ -20,9 +20,6 @@ namespace Student_Profile.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        // Admin Approval
-        // Pending, Approved, Rejected
-
         public string Status { get; set; } = "Pending";
 
         public bool IsReported { get; set; } = false;

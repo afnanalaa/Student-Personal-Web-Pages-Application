@@ -17,13 +17,11 @@ namespace Student_Profile.Controllers
             _context = context;
         }
 
-        // GET: عرض الفورم لرفع شكوى
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: إرسال الشكوى
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string subject, string content)

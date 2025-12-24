@@ -64,5 +64,20 @@ namespace Student_Profile.Controllers
             var students = await query.ToListAsync();
             return View(students);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> LiveSearch(string search)
+        {
+            if (string.IsNullOrWhiteSpace(search)) return Content("");
+
+            var students = await _context.StudentProfiles
+                .Include(p => p.User)
+                .Where(p => p.User.AccountStatus == "Approved" &&
+                           (p.User.FullName.Contains(search) || p.Department.Contains(search)))
+                .Take(5) 
+                .ToListAsync();
+
+            return PartialView("StudentSearchResults", students);
+        }
     }
 }

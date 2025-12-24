@@ -90,8 +90,6 @@
             
             <div id="cvDisplayArea">
                 {{-- هنا سيتم عرض CV الحالي (يمكن استخدام Partial View هنا) --}}
-                @* @Html.Partial("_StudentCVDisplay", Model.CVData) 
- *@
                 <div class="actions mt-3">
                     <button id="printBtn" class="btn btn-primary print-btn">Download / Print PDF</button>
                 </div>
@@ -101,7 +99,6 @@
         {{-- 2. Posts Tab Content --}}
         <div class="tab-pane fade" id="posts" role="tabpanel" tabindex="0">
             {{-- هنا يتم تضمين قائمة المنشورات وحالتها (عادةً عبر Partial View) --}}
-            @* @Html.Partial("_MyPostsStatus", Model.MyPosts) *@
         </div>
     </div>
 </div>

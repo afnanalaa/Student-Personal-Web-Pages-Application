@@ -1,8 +1,7 @@
-﻿/* ---------------- متغيرات الألوان ---------------- */
-:root {
-    --primary-color: #0077B6; /* أزرق احترافي */
-    --secondary-color: #333333; /* لون النصوص الداكن */
-    --accent-bg: #F4F7F9; /* خلفية رمادية فاتحة للمعلومات الجانبية */
+﻿:root {
+    --primary-color: #0077B6; 
+    --secondary-color: #333333;
+    --accent-bg: #F4F7F9; 
     --light-border: #EEEEEE;
 }
 
@@ -19,8 +18,6 @@
     color: var(--secondary-color);
 }
 
-   /*header
-      */
     .cv-container .cv-header {
         display: flex;
         justify-content: space-between;
@@ -28,7 +25,7 @@
         padding-bottom: 25px;
         margin-bottom: 30px;
         border-bottom: 3px solid var(--primary-color);
-        flex-wrap: wrap; /* 🎯 للسماح للعناصر بالنزول سطر جديد عند ضيق المساحة */
+        flex-wrap: wrap;
         gap: 20px;
     }
 
@@ -37,7 +34,7 @@
         flex-direction: row;
         align-items: center;
         flex: 1;
-        min-width: 280px; /* ضمان عدم ضغط الاسم والصورة */
+        min-width: 280px;
     }
 
     .cv-container .name-dept {
@@ -62,7 +59,7 @@
         border-left: 2px solid var(--light-border);
         gap: 8px;
         font-size: 0.9rem;
-        min-width: 300px; /* 🎯 مساحة كافية للبيانات لمنع تداخلها مع الصورة */
+        min-width: 300px; 
     }
 
     .cv-container .contact-item {
@@ -73,27 +70,27 @@
     }
 
         .cv-container .contact-item strong {
-            min-width: 110px; /* توحيد العرض للكلمات مثل Email: */
+            min-width: 110px; 
             flex-shrink: 0;
             color: var(--primary-color);
         }
 
         .cv-container .contact-item span,
         .cv-container .contact-item a {
-            word-break: break-all; /* 🎯 كسر الروابط الطويلة جداً لعدم دفع العناصر للخارج */
+            word-break: break-all; 
             color: var(--secondary-color);
             text-align: left;
         }
 
        @media (max-width: 768px) {
     .cv-container .cv-header {
-        flex-direction: column; /* تحويل العناصر لتكون فوق بعضها */
+        flex-direction: column;
         align-items: flex-start;
     }
 
     .cv-container .contact-info {
         padding-left: 0;
-        border-left: none; /* إزالة الخط الجانبي في الموبايل */
+        border-left: none;
         width: 100%;
         padding-top: 15px;
         border-top: 1px dashed var(--light-border);
@@ -104,7 +101,6 @@
     }
 }
 
-    /* ---------------- أقسام جسم الـ CV ---------------- */
 
     .cv-container .cv-body {
         padding-top: 10px;
@@ -128,17 +124,16 @@
             font-weight: 600;
             letter-spacing: 0.5px;
             margin-bottom: 10px;
-            border-bottom: 2px solid var(--accent-bg); /* خط تحت العنوان */
+            border-bottom: 2px solid var(--accent-bg); 
             display: inline-block;
             padding-bottom: 3px;
         }
 
     .cv-container p {
         margin-bottom: 8px;
-        white-space: pre-wrap; /* للحفاظ على تنسيق المشاريع والملخص */
+        white-space: pre-wrap; 
     }
 
-    /* ---------------- أزرار الطباعة (Print Button) ---------------- */
 
     .cv-container .actions {
         text-align: center;
@@ -160,9 +155,7 @@
             background-color: #005f93;
         }
 
-/* ---------------- التنسيق النهائي والمحسن للطباعة ---------------- */
 @media print {
-    /* 1. إخفاء كل ما هو ليس جزءاً من السيرة الذاتية */
     nav.navbar,
     .nav-tabs,
     .actions,
@@ -175,21 +168,19 @@
         display: none !important;
     }
 
-    /* 2. ضبط إعدادات الصفحة والهوامش */
     @page {
         size: A4;
-        margin: 1cm; /* هوامش متزنة للطباعة */
+        margin: 1cm; 
     }
 
     body {
         margin: 0 !important;
         padding: 0 !important;
         background-color: white !important;
-        -webkit-print-color-adjust: exact !important; /* لضمان طباعة الألوان والخلفيات */
+        -webkit-print-color-adjust: exact !important; 
         print-color-adjust: exact !important;
     }
 
-    /* 3. تمديد الحاوية لتملأ الورقة بالكامل */
     .cv-container {
         box-shadow: none !important;
         border: none !important;
@@ -199,7 +190,6 @@
         max-width: 100% !important;
     }
 
-    /* إزالة حدود الحاوية الخارجية في التاب */
     #myDashboardTabContent {
         border: none !important;
         padding: 0 !important;
@@ -207,9 +197,8 @@
         background: transparent !important;
     }
 
-    /* 4. تحسين الهيدر (الصورة والبيانات) */
     .cv-container .cv-header {
-        border-bottom: 3px solid #0077B6 !important; /* استخدام اللون الأساسي */
+        border-bottom: 3px solid #0077B6 !important; 
         margin-bottom: 25px !important;
         display: flex !important;
         flex-direction: row !important;
@@ -223,7 +212,6 @@
         border: 3px solid #0077B6 !important;
     }
 
-    /* 5. ضبط النصوص لتكون واضحة جداً باللون الأسود */
     h1, h3, h5, strong {
         color: #000 !important;
     }
@@ -232,7 +220,6 @@
         color: #000 !important;
     }
 
-    /* 6. ضمان ظهور أشرطة التقدم (Skills Progress Bars) */
     .progress {
         height: 10px !important;
         background-color: #e9ecef !important;
@@ -243,12 +230,11 @@
     }
 
     .progress-bar {
-        background-color: #0077B6 !important; /* لون المهارات */
+        background-color: #0077B6 !important;
         height: 100% !important;
         display: block !important;
     }
 
-    /* 7. منع قطع الأقسام بين ورقتين (Page Break) */
     .cv-section {
         page-break-inside: avoid;
         break-inside: avoid;
@@ -256,7 +242,6 @@
         border-bottom: 1px solid #eee !important;
     }
 
-    /* 8. تظبيط الروابط (LinkedIn) */
     a {
         text-decoration: none !important;
         color: black !important;

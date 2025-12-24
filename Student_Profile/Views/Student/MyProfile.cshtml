@@ -13,24 +13,47 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/student/profile.css" asp-append-version="true">
+
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid container">
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")">Port Said University</a>
-            <div class="d-flex">
-                <ul class="navbar-nav me-3">
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Directory", "Students")">Students Directory</a>
-                    </li>
-                </ul>
-                <a class="btn btn-info" href="@Url.Action("StudentDashboard", "Student")">
-                    <i class="bi bi-person-circle"></i> My Dashboard
-                </a>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="@Url.Action("Index", "Home")">
+                <span class="text-white">Port Said</span><span class="text-info ms-1">University</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="flex-grow-1 d-flex justify-content-center my-2 my-lg-0 position-relative mx-lg-4">
+                    <div class="search-wrapper w-100" style="max-width: 500px;">
+                        <div class="input-group bg-secondary bg-opacity-25 rounded-pill px-3 border border-secondary border-opacity-50">
+                            <span class="input-group-text bg-transparent border-0 text-info">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" id="searchInput" autocomplete="off"
+                                   class="form-control bg-transparent border-0 shadow-none text-white py-2"
+                                   placeholder="Search for peers, skills or dept...">
+                        </div>
+                        <div id="searchSuggestions" class="position-absolute w-100 mt-2 shadow-lg bg-white rounded-3 overflow-hidden d-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-center">
+                    <a class="btn btn-info rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center btn-sm"
+                       href="@Url.Action("StudentDashboard", "Student")">
+                        <i class="bi bi-speedometer2 me-2"></i>
+                        <span class="d-none d-sm-inline">My Dashboard</span>
+                        <span class="d-inline d-sm-none">Dashboard</span>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
-
     <div class="container my-5">
         <div class="row">
 
@@ -77,7 +100,6 @@
                         <div class="card mb-4 post-item shadow-sm">
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-3">
-                                    @* <img src="@Model.ProfileImageUrl" class="rounded-circle me-3" style="width: 40px; height: 40px;" alt="User Avatar"> *@
                                     <img src="~/uploads/student-profiles/@post.User.StudentProfile.ProfileImageUrl"
                                          class="rounded-circle me-3"
                                          style="width: 40px; height: 40px;"
@@ -121,5 +143,36 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#searchInput').on('keyup', function () {
+                let query = $(this).val();
+                let suggestionsBox = $('#searchSuggestions');
+
+                if (query.length > 1) {
+                    $.ajax({
+                        url: '/Home/LiveSearch',
+                        data: { search: query },
+                        success: function (data) {
+                            if(data.trim() !== "") {
+                                suggestionsBox.html(data).removeClass('d-none');
+                            } else {
+                                suggestionsBox.addClass('d-none');
+                            }
+                        }
+                    });
+                } else {
+                    suggestionsBox.addClass('d-none');
+                }
+            });
+
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.position-relative').length) {
+                    $('#searchSuggestions').addClass('d-none');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

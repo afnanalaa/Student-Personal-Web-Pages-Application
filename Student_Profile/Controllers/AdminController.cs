@@ -34,7 +34,6 @@ namespace Student_Profile.Controllers
           
         }
 
-        // GET: عرض صفحة تسجيل الدخول
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login()
@@ -42,7 +41,6 @@ namespace Student_Profile.Controllers
             return View("~/Views/Admin/Login.cshtml");
         }
 
-        // POST: معالجة بيانات تسجيل الدخول
     
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -89,21 +87,17 @@ namespace Student_Profile.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Dashboard()
         {
-            // 1️⃣ الطلاب المعتمدين
             var studentUsers = await _userManager.GetUsersInRoleAsync("Student");
             int totalApprovedStudents = studentUsers.Count(u => u.AccountStatus == "Approved");
 
-            // 2️⃣ طلبات التسجيل المعلقة
             int pendingRegistrations = await _userManager.Users
                                             .CountAsync(u => u.AccountStatus == "Pending");
 
-            // 3️⃣ البوستات المعلقة
             int pendingPosts = await _context.Posts
                                     .CountAsync(p => p.Status == "Pending");
 
             int totalPendingRequests = pendingRegistrations + pendingPosts;
 
-            // ⭐ 4️⃣ المحتوى المبلّغ عنه + الشكاوى
 
             int reportedPosts = await _context.Posts
                                     .CountAsync(p => p.IsReported == true);
@@ -178,20 +172,19 @@ namespace Student_Profile.Controllers
             _context.AdminActions.Add(actionRecord);
             await _context.SaveChangesAsync();
 
-            // 🔥 EMAIL PART
             var loginUrl = Url.Action("Login", "Account", null, Request.Scheme);
 
             var emailBody = $@"
-        <h2>🎉 Account Approved</h2>
-        <p>Hello <b>{student.FullName}</b>,</p>
-        <p>Your account has been approved successfully.</p>
-        <p>
-            <a href='{loginUrl}' 
-               style='padding:10px 15px;background:#198754;color:white;text-decoration:none; margin-top:20px;'>
-               Login Now
-            </a>
-        </p>
-           ";
+                <h2>🎉 Account Approved</h2>
+                <p>Hello <b>{student.FullName}</b>,</p>
+                <p>Your account has been approved successfully.</p>
+                 <p>
+                 <a href='{loginUrl}' 
+                  style='padding:10px 15px;background:#198754;color:white;text-decoration:none; margin-top:20px;'>
+                  Login Now
+                 </a>
+                </p>
+                      ";
 
             await _emailSender.SendEmailAsync(
                 student.Email,
@@ -316,16 +309,6 @@ namespace Student_Profile.Controllers
             post.Status = "Approved";
             await _context.SaveChangesAsync();
 
-            //var actionRecord = new AdminAction
-            //{
-            //    PostId = post.Id,
-            //    AdminId = _userManager.GetUserId(User),
-            //    Action = "Approved",
-            //    ActionDate = DateTime.Now
-            //};
-            //_context.AdminActions.Add(actionRecord);
-            //await _context.SaveChangesAsync();
-
             TempData["SuccessMessage"] = "Post approved successfully!";
             return RedirectToAction(nameof(PendingPosts));
         }
@@ -342,30 +325,17 @@ namespace Student_Profile.Controllers
             return RedirectToAction(nameof(PendingPosts));
         }
 
-        // All complains pending,resolved,tech....
-        //public async Task<IActionResult> Complaints()
-        //{
-        //    var complaints = await _context.Complaints
-        //        .Include(c => c.User)
-        //        .OrderByDescending(c => c.CreatedAt)
-        //        .ToListAsync();
-
-        //    return View(complaints);
-        //}
-
         public async Task<IActionResult> Complaints()
         {
             var complaints = await _context.Complaints
                 .Include(c => c.User)
-                .Where(c => c.Status == "Pending") // بس الشكاوي Pending
+                .Where(c => c.Status == "Pending") 
                 .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
 
             return View(complaints);
         }
 
-
-        // POST: Assign to technician
         [HttpPost]
         public async Task<IActionResult> AssignToTechnical(int id)
         {
@@ -379,7 +349,6 @@ namespace Student_Profile.Controllers
             return RedirectToAction(nameof(Complaints));
         }
 
-        // POST: Mark as resolved
         [HttpPost]
         public async Task<IActionResult> MarkAsResolved(int id)
         {
@@ -393,7 +362,6 @@ namespace Student_Profile.Controllers
             return RedirectToAction(nameof(Complaints));
         }
 
-        // POST: Contact sender (optional: maybe just set a comment)
         [HttpPost]
         public async Task<IActionResult> ContactSender(int id, string adminComment)
         {

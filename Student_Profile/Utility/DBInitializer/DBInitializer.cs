@@ -23,7 +23,6 @@ namespace Student_Profile.Utility.DBInitializer
         {
             try
             {
-                // 1️⃣ Apply pending migrations
                 if (_context.Database.GetPendingMigrations().Any())
                 {
                     Console.WriteLine("Applying migrations...");
@@ -31,7 +30,6 @@ namespace Student_Profile.Utility.DBInitializer
                     Console.WriteLine("Migrations applied.");
                 }
 
-                // 2️⃣ Create roles if not exist
                 string[] roles = new[] { SD.SuperAdmin, SD.Admin, SD.Student };
                 foreach (var roleName in roles)
                 {
@@ -49,7 +47,6 @@ namespace Student_Profile.Utility.DBInitializer
                     }
                 }
 
-                // 3️⃣ Create SuperAdmin user
                 var superAdminEmail = "superadmin@gmail.com";
                 var superAdmin = _userManager.FindByEmailAsync(superAdminEmail).GetAwaiter().GetResult();
 
@@ -62,7 +59,7 @@ namespace Student_Profile.Utility.DBInitializer
                         EmailConfirmed = true,
                         FullName = "University Super Admin",
                         NationalId = "0000000001",
-                        StudentCardImageORNationalUrl = "N/A" // أو رابط صورة لو عندك
+                        StudentCardImageORNationalUrl = "N/A" 
                     };
 
                     var result = _userManager.CreateAsync(superAdmin, "SuperAdmin123$").GetAwaiter().GetResult();
@@ -78,14 +75,12 @@ namespace Student_Profile.Utility.DBInitializer
                     }
                 }
 
-                // Add SuperAdmin to role
                 if (!_userManager.IsInRoleAsync(superAdmin, SD.SuperAdmin).GetAwaiter().GetResult())
                 {
                     _userManager.AddToRoleAsync(superAdmin, SD.SuperAdmin).GetAwaiter().GetResult();
                     Console.WriteLine("SuperAdmin added to role SuperAdmin.");
                 }
 
-                // 4️⃣ Create Admin user
                 var adminEmail = "admin@gmail.com";
                 var adminUser = _userManager.FindByEmailAsync(adminEmail).GetAwaiter().GetResult();
 
@@ -114,7 +109,6 @@ namespace Student_Profile.Utility.DBInitializer
                     }
                 }
 
-                // Add Admin to role
                 if (!_userManager.IsInRoleAsync(adminUser, SD.Admin).GetAwaiter().GetResult())
                 {
                     _userManager.AddToRoleAsync(adminUser, SD.Admin).GetAwaiter().GetResult();

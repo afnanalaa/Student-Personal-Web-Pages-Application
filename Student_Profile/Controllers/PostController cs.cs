@@ -181,54 +181,6 @@ namespace Student_Profile.Controllers
             TempData["Success"] = "Your post has been updated successfully and is pending approval..";
             return RedirectToAction("MyPosts");
         }
-        //public async Task<IActionResult> CreatePost(PostViewModel model)
-        //{
-        //    if (string.IsNullOrWhiteSpace(model.Content) && model.ImageFile == null)
-        //    {
-        //        ModelState.AddModelError("", "Post must contain either text content or an image.");
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //        return View("~/Views/Student/Post/CreatePost.cshtml", model);
-
-        //    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //    string imageUrl = null;
-
-        //    if (model.ImageFile != null)
-        //    {
-        //        string wwwRootPath = _hostEnvironment.WebRootPath;
-        //        string uploadPath = Path.Combine(wwwRootPath, "images", "posts");
-
-        //        if (!Directory.Exists(uploadPath))
-        //        {
-        //            Directory.CreateDirectory(uploadPath);
-        //        }
-
-        //        string fileName = Guid.NewGuid().ToString();
-        //        string extension = Path.GetExtension(model.ImageFile.FileName);
-
-        //        using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName + extension), FileMode.Create))
-        //        {
-        //            await model.ImageFile.CopyToAsync(fileStream);
-        //        }
-
-        //        imageUrl = Path.Combine("/images/posts", fileName + extension).Replace('\\', '/');
-        //    }
-
-        //    var post = new Post
-        //    {
-        //        UserId = userId,
-        //        Content = model.Content,
-        //        ImageFile = imageUrl,
-        //        Status = "Pending", 
-        //        CreatedAt = DateTime.Now
-        //    };
-
-        //    _context.Posts.Add(post);
-        //    await _context.SaveChangesAsync();
-
-        //    return RedirectToAction("MyPosts");
-        //}
 
         [HttpPost]
         public async Task<IActionResult> ReportPost(int postId)
@@ -256,68 +208,9 @@ namespace Student_Profile.Controllers
             if (post == null)
                 return NotFound();
 
-            // 🔹 لا نقوم بتحميل الصورة إلى الـ ViewModel في الـ GET
             var model = new PostViewModel { Content = post.Content, };
             return View("~/Views/Student/Post/EditPost.cshtml", model);
         }
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> EditPost(int id, PostViewModel model)
-        //{
-        //    // 🔹 التحقق المخصص
-        //    if (model.ImageFile == null && string.IsNullOrWhiteSpace(model.Content))
-        //    {
-        //        ModelState.AddModelError("", "Post must contain either text content or a new image.");
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //        return View("~/Views/Student/Post/EditPost.cshtml", model);
-
-        //    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        //    var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
-
-        //    if (post == null)
-        //        return NotFound();
-
-        //    string wwwRootPath = _hostEnvironment.WebRootPath;
-
-        //    // 1. معالجة الصورة الجديدة
-        //    if (model.ImageFile != null)
-        //    {
-        //        // 1.1. حذف الصورة القديمة إذا كانت موجودة
-        //        if (!string.IsNullOrEmpty(post.ImageFile))
-        //        {
-        //            string oldFilePath = Path.Combine(wwwRootPath, post.ImageFile.TrimStart('/'));
-        //            if (System.IO.File.Exists(oldFilePath))
-        //            {
-        //                System.IO.File.Delete(oldFilePath);
-        //            }
-        //        }
-
-        //        // 1.2. حفظ الصورة الجديدة
-        //        string uploadPath = Path.Combine(wwwRootPath, "images", "posts");
-        //        string fileName = Guid.NewGuid().ToString();
-        //        string extension = Path.GetExtension(model.ImageFile.FileName);
-
-        //        using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName + extension), FileMode.Create))
-        //        {
-        //            await model.ImageFile.CopyToAsync(fileStream);
-        //        }
-
-        //        // تحديث المسار
-        //        post.ImageFile = Path.Combine("/images/posts", fileName + extension).Replace('\\', '/');
-        //    }
-
-        //    post.Content = model.Content;
-        //    post.Status = "Pending";
-
-        //    await _context.SaveChangesAsync();
-
-        //    return RedirectToAction("MyPosts");
-        //}
 
 
         [HttpPost]

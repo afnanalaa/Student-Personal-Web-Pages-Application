@@ -51,7 +51,6 @@
 
         <div class="tab-content">
 
-            <!-- Pending Students Tab -->
             <div class="tab-pane fade show active" id="students-tab" role="tabpanel">
                 <h4 class="mb-3 text-secondary">Pending Student Account Verification</h4>
 
@@ -99,7 +98,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Approve Modal -->
                                 <div class="modal fade" id="approveStudentModal-@st.Id" tabindex="-1">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -122,7 +120,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Reject Modal -->
                                 <div class="modal fade" id="rejectStudentModal-@st.Id" tabindex="-1">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -150,7 +147,6 @@
                 }
             </div>
 
-            <!-- Pending Posts Tab -->
             <div class="tab-pane fade" id="posts-tab" role="tabpanel">
                 <h4 class="mb-3 text-secondary">Pending Student Posts</h4>
 
@@ -173,8 +169,6 @@
                                 @if (!string.IsNullOrEmpty(post.ImageFile))
                                 {
                                     <img src="@post.ImageFile" class="img-fluid rounded mb-3" alt="Post Image" style="max-width: 300px;">
-
-                                    @* <img src="@Url.Content(post.ImageFile)" class="img-fluid rounded mb-3" alt="Post Image"> *@
                                 }
 
                                 <button class="btn btn-success btn-sm me-2" data-bs-toggle="modal" data-bs-target="#approvePostModal-@post.Id">Approve & Publish</button>
@@ -182,7 +176,6 @@
                             </div>
                         </div>
 
-                        <!-- Approve Post Modal -->
                         <div class="modal fade" id="approvePostModal-@post.Id" tabindex="-1">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -204,7 +197,6 @@
                             </div>
                         </div>
 
-                        <!-- Reject Post Modal -->
                         <div class="modal fade" id="rejectPostModal-@post.Id" tabindex="-1">
                             <div class="modal-dialog">
                                 <div class="modal-content">

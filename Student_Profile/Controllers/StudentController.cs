@@ -43,7 +43,6 @@ namespace Student_Profile.Controllers
 
             if (profile == null) return NotFound();
 
-            // تحديث حالة الخصوصية
             profile.PrivacyMode = mode;
             await _context.SaveChangesAsync();
 
@@ -53,7 +52,6 @@ namespace Student_Profile.Controllers
 
 
 
-        // GET: Create Profile
         [HttpGet]
         public async Task<IActionResult> CreateForm()
         {
@@ -67,7 +65,6 @@ namespace Student_Profile.Controllers
             return View();
         }
 
-        // POST: Create Profile
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateForm(StudentProfileViewModel model)
@@ -101,11 +98,9 @@ namespace Student_Profile.Controllers
             _context.StudentProfiles.Add(profile);
             await _context.SaveChangesAsync();
 
-            // إرسال slug كـ JSON ليعرفه الجافا
             return Json(new { slug = profile.ProfileSlug });
         }
 
-        // GET: MyProfile
         [HttpGet]
         public async Task<IActionResult> MyProfile()
         {
@@ -219,7 +214,7 @@ namespace Student_Profile.Controllers
                 UserId = userId,
                 Content = model.Content,
                 ImageFile = imageUrl,
-                Status = "Pending", // 🔹 بوست جديد في حالة انتظار
+                Status = "Pending", 
                 CreatedAt = DateTime.Now
             };
 
@@ -231,7 +226,6 @@ namespace Student_Profile.Controllers
         }
     
 
-        // GET: EditProfile
         [HttpGet]
         public async Task<IActionResult> EditProfile()
         {
@@ -255,23 +249,18 @@ namespace Student_Profile.Controllers
             return View(model);
         }
 
-        // POST: EditProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProfile(StudentProfileViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            // 🎯 1. فحص المحتوى غير اللائق (Automatic Blocking)
-            // قمت بإضافة فحص للمشاريع (Projects) أيضاً لزيادة الأمان
             if (await _filterService.ContainsProhibitedContent(model.Bio) ||
                 await _filterService.ContainsProhibitedContent(model.Skills) ||
                 await _filterService.ContainsProhibitedContent(model.Projects))
             {
-                // إخطار المستخدم بالمنع
                 ModelState.AddModelError("", "Action Denied: Your profile content contains words restricted by the university policy.");
 
-                // يمكنك هنا اختيارياً تسجيل محاولة الاختراق في جدول تنبيهات للأدمن (Alerts)
                 return View(model);
             }
 
@@ -302,7 +291,6 @@ namespace Student_Profile.Controllers
             return RedirectToAction("MyProfile");
         }
 
-        // GET: EditImage
         [HttpGet]
         public async Task<IActionResult> EditImage()
         {
@@ -317,7 +305,6 @@ namespace Student_Profile.Controllers
             return View(model);
         }
 
-        // POST: EditImage
         [HttpPost]
         public async Task<IActionResult> EditImage(StudentProfileImageViewModel model)
         {
@@ -339,7 +326,6 @@ namespace Student_Profile.Controllers
             return RedirectToAction("EditProfile");
         }
 
-        // POST: RemoveProfileImage
         [HttpPost]
         public async Task<IActionResult> RemoveProfileImage()
         {
@@ -358,8 +344,6 @@ namespace Student_Profile.Controllers
             return RedirectToAction("EditProfile");
         }
 
-
-        // 🔹 Helpers
         private async Task<string> SaveProfileImage(IFormFile image)
         {
             string fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
@@ -402,13 +386,11 @@ namespace Student_Profile.Controllers
 
             if (profile == null) return NotFound();
 
-            // منع الوصول إذا كان البروفايل Private والأدمن ليس هو المستعرض
             if (profile.PrivacyMode == "Private" && !User.IsInRole("Admin"))
             {
-                return Forbid(); // أو توجيهه لصفحة تخبره بأن الملف خاص
+                return Forbid();
             }
 
-            // منع الوصول للزوار إذا كان الملف لطلاب الجامعة فقط
             if (profile.PrivacyMode == "University" && !User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "Account");

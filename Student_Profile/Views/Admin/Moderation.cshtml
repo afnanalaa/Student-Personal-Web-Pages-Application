@@ -17,7 +17,6 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark ">
         <div class="container">
             <a class="navbar-brand text-warning" href="@Url.Action("Dashboard","Admin")">ADMIN PANEL</a>
@@ -47,7 +46,6 @@
     <div class="container my-5">
         <h2 class="fw-bold text-primary mb-4">Content & Complaints Moderation</h2>
 
-        <!-- TABS -->
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#reported">
@@ -63,7 +61,6 @@
 
         <div class="tab-content border border-top-0 p-4 bg-white shadow-sm">
 
-            <!-- 🚩 REPORTED POSTS -->
             <div class="tab-pane fade show active" id="reported">
                 @if (!Model.ReportedPosts.Any())
                 {
@@ -81,11 +78,11 @@
                             <div class="card-body">
                                 <p>@post.Content</p>
                                 <div class="d-flex gap-2">
-                                    <form asp-action="ApprovePost" asp-controller="Admin" method="post">
+                                    <form asp-action="ApprovePost" asp-controller="AdminModeration" method="post">
                                         <input type="hidden" name="id" value="@post.Id" />
                                         <button class="btn btn-success">✔ Approve</button>
                                     </form>
-                                    <form asp-action="RejectPost" asp-controller="Admin" method="post">
+                                    <form asp-action="RejectPost" asp-controller="AdminModeration" method="post">
                                         <input type="hidden" name="id" value="@post.Id" />
                                         <button class="btn btn-danger">❌ Remove</button>
                                     </form>
@@ -96,7 +93,6 @@
                 }
             </div>
 
-            <!-- 💬 COMPLAINTS -->
             <div class="tab-pane fade" id="complaints">
                 @if (!Model.Complaints.Any())
                 {

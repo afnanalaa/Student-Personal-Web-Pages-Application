@@ -19,14 +19,12 @@ namespace Student_Profile.Services
         {
             if (string.IsNullOrWhiteSpace(text)) return false;
 
-            // جلب الكلمات المحظورة من قاعدة البيانات وتحويلها لنصوص صغيرة للمقارنة
             var bannedWords = await _context.BannedWords
                 .Select(w => w.Word.ToLower())
                 .ToListAsync();
 
             var lowerText = text.ToLower();
 
-            // فحص ما إذا كان النص يحتوي على أي كلمة محظورة
             return bannedWords.Any(word => lowerText.Contains(word));
         }
     }

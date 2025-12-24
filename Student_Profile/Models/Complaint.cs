@@ -20,8 +20,8 @@ namespace Student_Profile.Models
         [Required]
         public string Content { get; set; }
 
-        public string Type { get; set; } = "General"; // Technical, Feedback, etc.
-        public string Status { get; set; } = "Pending"; // Pending, Solved
+        public string Type { get; set; } = "General"; 
+        public string Status { get; set; } = "Pending"; 
         public string? AdminComment { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }

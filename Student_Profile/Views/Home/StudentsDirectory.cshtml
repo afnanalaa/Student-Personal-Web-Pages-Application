@@ -18,29 +18,35 @@
         </div>
     </div>
 
-    <div class="row g-4">
-        @foreach (var student in Model)
-        {
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 text-center p-3">
-                    <img src="~/uploads/student-profiles/@(student.ProfileImageUrl ?? "default-avatar.png")"
-                         class="rounded-circle mx-auto mb-3"
-                         style="width: 100px; height: 100px; object-fit: cover;">
-                    <h5 class="fw-bold">@student.User.FullName</h5>
-                    <p class="text-info small mb-2">@student.Department</p>
-                    <p class="small text-muted text-truncate" style="max-width: 100%;">@student.Bio</p>
-                    @* <a href="@Url.Action("Details", "Student", new { slug = student.ProfileSlug })"
-                       class="btn btn-outline-primary btn-sm mt-auto">View Profile</a> *@
-                    <div class="card-footer bg-transparent border-0 pb-4">
-                        <a asp-controller="Student"
-                           asp-action="Details"
-                           asp-route-slug="@student.ProfileSlug"
-                           class="btn btn-outline-primary btn-sm w-100 rounded-pill">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 bg-white shadow-sm rounded-3 p-0 overflow-hidden border">
+                <div class="p-3 border-bottom bg-light">
+                    <h6 class="mb-0 fw-bold">Search Results</h6>
+                </div>
+
+                @foreach (var student in Model)
+                {
+                    <div class="d-flex align-items-center p-3 border-bottom hover-bg-light">
+                        <img src="~/uploads/student-profiles/@(student.ProfileImageUrl ?? "default-avatar.png")"
+                             class="rounded-circle border me-3"
+                             style="width: 60px; height: 60px; object-fit: cover;">
+
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">
+                                <a asp-controller="Student" asp-action="Details" asp-route-slug="@student.ProfileSlug" class="text-decoration-none fw-bold text-dark">
+                                    @student.User.FullName
+                                </a>
+                            </h6>
+                            <p class="small text-muted mb-0">@student.Department</p>
+                        </div>
+
+                        <a asp-controller="Student" asp-action="Details" asp-route-slug="@student.ProfileSlug" class="btn btn-outline-primary btn-sm rounded-pill px-3">
                             View Profile
                         </a>
                     </div>
-                </div>
+                }
             </div>
-        }
+        </div>
     </div>
 </div>
